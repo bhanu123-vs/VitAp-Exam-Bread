@@ -1,0 +1,458 @@
+[
+  {
+    "code": "MAT1001",
+    "title": "Calculus for Engineers",
+    "cat1": "https://drive.google.com/drive/folders/1sUS7Z4xjNW9tsQ36ZdPHkWncXnrNdzNH?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1sWtS5_9Fb1msNRHw00dpafU78iteZJXZ?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1sX8kIpxqxuv_rnECo7rS9Ldl8eycBdJ5?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1s_xhyXpQyjneCDcahqLMuby_uJixVPAp?usp=drive_link"
+  },
+  {
+    "code": "CSE1012",
+    "title": "Problem Solving using Python",
+    "cat1": "https://drive.google.com/drive/folders/1HbrRdicCN_EgmKlG3itbsr_k5ceG1nZH?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1HnGXiMaheMW3fJzTlfhkIDH5vpEC-dLM?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1I4APVQ1f2H7rsCAmgOtkJdyfcZEYf0Mb?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1I70wRdv8K-i1r0aujNJlSc_KDhwrtJwL?usp=drive_link"
+  },
+  {
+    "code": "CHY1009",
+    "title": "Chemistry and Environmental Studies",
+    "cat1": "https://drive.google.com/drive/folders/1tCwOte2cKXx6nxrfCrhPpWog60SeI3pF?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1tGxg1IosjQ1Q3mgf0p_eVp2fA0VQk61u?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1tHnviLCZLHb5nIIZN46GeMXByYgd00tk?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1tQB_pJG7FDbYzPHz6Qeo65-Tx7f4aGyt?usp=drive_link"
+  },
+  {
+    "code": "ECE1002",
+    "title": "Fundamentals of Electrical and Electronics Engineering",
+    "cat1": "https://drive.google.com/drive/folders/1B7lYvtH4NCqDERTAltu302IpTAPkV64a?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1BCQCinQMg26R58CiLyfiq0aeVqStrx66?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1BJO_Uar8Po1Cu1wJKnoxgxmyqc8Y3AwG?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1BONfiA-Tot34L_WtD5Wonr5-N65Fz-tL?usp=drive_link"
+  },
+  {
+    "code": "ENG1001",
+    "title": "English for Essential Communication",
+    "cat1": "https://drive.google.com/drive/folders/1IHV-gfowHFW01r0sML4qgWHCW8Kpx3tS?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1IIYV3oggo54jKUcy1WLHaME09Ad3odv1?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1IS00eod11NLFhK-3OcplfObtce9i9avB?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1IWiIQXy_Wih8CiV_J5ixj0vF4bURe9aC?usp=drive_link"
+  },
+  {
+    "code": "ENG1002",
+    "title": "English for Effective Communication",
+    "cat1": "https://drive.google.com/drive/folders/1IYzXKk3ugxYO85GD0On4VnxmtPWtDwgY?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1I_lGen6bX2__WDcMo-Wy4pExX_khtqC7?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1IdbAS7uuur7rBe3DwKm6AazIj64l4tdc?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1IeMm_KgvNjJDTruPTeAg05wARxE5ajvT?usp=drive_link"
+  },
+  {
+    "code": "PHY1008",
+    "title": "Modern Physics",
+    "cat1": "https://drive.google.com/drive/folders/1sz3A-GT4uzzPLx4ovcCzIjRHBy15O0Ku?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1t39HIAUKxnkc7iQqrWo323o3oX3vjPHf?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1t4uIwKaFsDIIa2egmJCqkBFf_YEVbqQ5?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1t9eAEmdGjVITrI-S3SL1o6eoR-DQ146D?usp=drive_link"
+  },
+  {
+    "code": "MAT1002",
+    "title": "Applications of DIfferential and Difference Equations",
+    "cat1": "https://drive.google.com/drive/folders/1sh4aiJgW5cBvONyG3MGmsEK5t3wRUgwH?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1shMVkiOod-Kxubpkd6y_m6abmdX4xSew?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1srvzXnCnOYdxfvsyru1VXnFrYLnheeLp?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1stJE8PivCBSlORnAn7zsiBFf652KAoxb?usp=drive_link"
+  },
+  {
+    "code": "CSE2005",
+    "title": "Object Oriented Programming using JAVA",
+    "cat1": "https://drive.google.com/drive/folders/1j5cNzevCnt3DnXMYBY1NVkNBrzQipkmI?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/18xeL8TkJGesobmIyqiXHUfmfX3NcAudw?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1_WzQBvmPLrqkHMqrNm5vf-qymuzh0tWU?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1WYZDP08SlUIkmYndZx-AifmPoXnHgg_8?usp=drive_link"
+  },
+  {
+    "code": "ECE1003",
+    "title": "Digital Logic Design",
+    "cat1": "https://drive.google.com/drive/folders/1HlxGiSWQwNzL8i9Jf4rrFgr7pDdnF43_?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1KYfL7rpEQuwyovGb_WaFHyo0FW5aEbPH?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1x84CM3OM_p8Kp7zJ5KbBP1x4sLcXdg1P?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1zrTnZ_Vic99JgwBNO2sA3bTwRI45yRZf?usp=drive_link"
+  },
+  {
+    "code": "ENG2001",
+    "title": "English for Professional Communication",
+    "cat1": "https://drive.google.com/drive/folders/1kdeAPK33iMjHknMux0f2wmxIftNCIU4p?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1LRC9tqkDdgvkl0j9Hx2kK0-i8Ipk9ggC?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1BqoZVBa0BorFroSJzBebI4GZqMlyCiGP?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1lUQ83HC1W2kF6ADniYvD8lPH3ZtmJ2S1?usp=drive_link"
+  },
+  {
+    "code": "MAT1008",
+    "title": "Fundamentals of Calculus",
+    "cat1": "https://drive.google.com/drive/folders/10GMlsZq5NyBuvrWmqscAgWtA96Y9yBs5?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/10JEH4ZWXZCWN9otlpUtAz3v6c3uQCa19?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/10RTJKQrZaCkM3fhnzM2Wc5-dVRuYibhr?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/10RzV2xvHsppyHND0dG4Jp74X-1SNzWD5?usp=drive_link"
+  },
+  {
+    "code": "SWE1004",
+    "title": "Introduction to Programming in Python",
+    "cat1": "https://drive.google.com/drive/folders/1mpmNGRRzTh_5iwg9DEs3ko_44WivE7GQ?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1mqqDcljG00fUJa6Kg-DKlBO7VBp3zMux?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1my6RQ9lTTLUNx80wuuUaiWhGbxfeMiFm?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1n4VUtTZ86aYb5nycTq4VL0kZ22Rf3Yyg?usp=drive_link"
+  },
+  {
+    "code": "CHY1008",
+    "title": "Basic Chemistry and Environmental Sciences",
+    "cat1": "https://drive.google.com/drive/folders/1of_gmBaVUbG6FmkUi7PQ5JDrnSeR_HmI?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1oiRO0-qC3j8gekBEYLIgIJFQM41ch7Kq?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1ojsW9LSvXhN79DmHYt2ZYE36gaH37lsk?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1or93H8WuLAp-ySL2qKpdZSojIdBOCWa5?usp=drive_link"
+  },
+  {
+    "code": "ECE1005",
+    "title": "Basic Electric and Electronics Studies",
+    "cat1": "https://drive.google.com/drive/folders/1oJtHYEF-NZxVC9FZClMjYashq_rUXrgu?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1oLBwyOl_UgFrp42XiCK5YKD-vj2X0c4J?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1oQ2E3O12Q-MrSyF0bAy8SYSkI3PGEhpr?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1oRTUISkZf3baRQXxsBFLWreFxos1XYOk?usp=drive_link"
+  },
+  {
+    "code": "ENG1005",
+    "title": "Basic Communication in English",
+    "cat1": "https://drive.google.com/drive/folders/1nlbthgv0vU7xDT2ahQikwOoqe2nOpfaM?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1nqlvkd7gczzqVv44xnmOI5JDMKWlCC3a?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1nsQj97b3YlzbOjskxi2SFudecHT-5b0Q?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1nyUo5P2AWZ7GsmL96QxdcKyDUuYOxVgL?usp=drive_link"
+  },
+  {
+    "code": "ENG1006",
+    "title": "Functional Communication in English",
+    "cat1": "https://drive.google.com/drive/folders/1nXj6b2I-QhSFgFERigVGwBN7HVAh6S5q?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1nZV4Z6Yf0yufdJbfyp59eVioUhxLEUNf?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1na-PtJW4yHIDiaRImSbZtUVd9uFtIfSF?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1ndgy07kMjJZMtuZx0R-9qn9P9dpY4Aqy?usp=drive_link"
+  },
+  {
+    "code": "PHY1005",
+    "title": "Fundamentals of Engineering Physics",
+    "cat1": "https://drive.google.com/drive/folders/1n4oM-GIFdJKW48biygXpEDAwCUytcgio?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1n7ceVCvLw55Qtw0bFsXLRQNhDeERw461?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1n9fS0n75c9Zlk0TmhGjx66BWNemne2x1?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1nB1DaZXS07f71p2q3h1K6FAnWIRfGi0l?usp=drive_link"
+  },
+  {
+    "code": "MAT1009",
+    "title": "Applied Linear Algebra",
+    "cat1": "https://drive.google.com/drive/folders/1mGkPgQKPgcgO4cYaT5Ie1wxmK8W8GSa5?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1mI02yBTPpqhPmZS9WFGdMRs3mkVIaF3l?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1mN3wNJbKi8qoRldw7zV6Bm9i781d0GxE?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1mRHOY6po23RCAoh4qG0xocp9E5sAB55K?usp=drive_link"
+  },
+  {
+    "code": "MAT1014",
+    "title": "Fundamental Statistics",
+    "cat1": "https://drive.google.com/drive/folders/1lzFI9tVtAMvWQHf-PwFbI9HDaCz5vQAU?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1m-DlHYRVAscGTNnfRcOzmtBHuvsHdwUn?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1m0-a6Fsq9NFg-SHJuHmdEX1jTfiw_i3A?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1m6JgA9j7vO8EAt8iNfcpNLfIhFtIqv3v?usp=drive_link"
+  },
+  {
+    "code": "SWE2005",
+    "title": "Concepts of Object Oriented Programming",
+    "cat1": "https://drive.google.com/drive/folders/1maFBER8bmzHxckfCWkaqXrc48VoRwn3a?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1mbJfAgJNgBAU7iAjuqRlWvafr_oEZFK3?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1mnWeDINlF2-DPwMHjISnfrWSLgjZZAqO?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1mpELDNMcq6gVwppR7u5Rlp9jJPppyidH?usp=drive_link"
+  },
+  {
+    "code": "ECE1006",
+    "title": "Digital Logic and Microprocessors",
+    "cat1": "https://drive.google.com/drive/folders/1o4F-WRuSeuPZMyherFO0_UULuDl28XTM?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1o6mWzjjHkvIA3F0ioFKzNjyDcsKuSgCe?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1oItZPNh8HWThjma5HAjMOZgpi6ix_A_H?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1oJqITdk6kE_Z_eqmJuaUZLtkMPrxpn9_?usp=drive_link"
+  },
+  {
+    "code": "ENG2004",
+    "title": "Advanced Communication in English",
+    "cat1": "https://drive.google.com/drive/folders/1nML1nyE7RMKBMiQwaq5hWdqHz7nRlDf1?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1nMOueQTw8jsEZk_q5RtcdCZYru7hMY37?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1nQa44CLvitwzLsw-1D91ftcwQDagLAA4?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1nXZea6RzfZyZEYwKglVXQOQFOrNturb3?usp=drive_link"
+  },
+  {
+    "code": "CSE1005",
+    "title": "Software Engineering",
+    "cat1": "https://drive.google.com/drive/folders/1jMBBLuTiRnuboNZp6U0-vzp61oobzkN-?usp=邢drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1jOHehwavMI95WGb1UZT_u8UsoP_Wj8TA?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1jboA_GNIOCb2gdkBpO9HzLgInlUGv4s0?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1jf7XzazBuoX39py19yxr73SrSC4NKv6L?usp=drive_link"
+  },
+  {
+    "code": "CSE1006",
+    "title": "Foundations for Data Analytics",
+    "cat1": "https://drive.google.com/drive/folders/1mh-JSiV9UYeD1SZ5nQb4KAGed-VkwcAf?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1moNk4WNg1RIv-KVhtFghux19Tr1ndAOq?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1mpK1qogimfmQ3WUbfJnFf2oVh65vLPjy?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1mr6Gn6wxRjfyhW11v8UwHBA-Jf3D-yPx?usp=drive_link"
+  },
+  {
+    "code": "CSE1008",
+    "title": "Theory of Computation",
+    "cat1": "https://drive.google.com/drive/folders/1qjWQNyK_g-qSU3bLcoh9u_9MxDPDulqY?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1r1tFBYBdxyRKaAJI9XJ2Rvo8YRLOMsKk?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1r51lDKkn4J_vxKe4amzWXFNfzucCMXvy?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1rGsDAB5_7xqwDupf1x_uujybNFoRZP7T?usp=drive_link"
+  },
+  {
+    "code": "CSE2001",
+    "title": "Data Structures and Algorithms",
+    "cat1": "https://drive.google.com/drive/folders/1lo6A5C0wOv1nsejeojLH4k2Hp7gaKIAq?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1lqRprTwPcGeGsoJ-dT3PcQkGnVdPWsx8?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1m0UbF-64bWf7Q191skbCje9o3hNkXFui?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1m2dEKU7xfnJAkAYHpvhZW96IM4f3ccsV?usp=drive_link"
+  },
+  {
+    "code": "CSE2007",
+    "title": "Database Management Systems",
+    "cat1": "https://drive.google.com/drive/folders/1TC6KJHub14Vuoc3sKifMab1yqsNJFuEL?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1n2NasPUH08rfNPnHx7YSPlPfzcM0n0Fi?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1OMDv8oQrTvBJRwcUBpBSNbxSheM41Now?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1bdD7cZR91oTql1Kv0XL7WczCjTYKDcrC?usp=drive_link"
+  },
+  {
+    "code": "CSE2008",
+    "title": "Operating Systems",
+    "cat1": "https://drive.google.com/drive/folders/1jgmib41zc7nSC2t6lMba6oP5xbQWm-RW?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1k0qCQ9HsLar6P7FgD5xb5twxVJazObbl?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1k23h2pZkXDtvT6vnGtNEPa3K7zqbsSDS?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1k3qOeEjQ7I30AvfIsw_9Vowxq8XT-sBH?usp=drive_link"
+  },
+  {
+    "code": "CSE2009",
+    "title": "Soft Computing",
+    "cat1": "https://drive.google.com/drive/folders/1N92DszjHWfTFljnxW7mEzcN1nsJaYyce?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1NCjwmDUMCmSL-e2Jn9Qo9DuDFSYD_lOd?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1NIhLv1VT9ICdxruuq3uqOP2WNiDQRPhl?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1NH9Cfk6onDuLzEJvokGRZUcBr6-_o5w-?usp=drive_link"
+  },
+  {
+    "code": "CSE2027",
+    "title": "SD&A",
+    "cat1": "https://drive.google.com/drive/folders/1i1S0xAQWhdQQ7d0V2vkK8txT2Fw7WLhc?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1iILjylgzUcUGCe-4eyYlK2_lUCvXWNMe?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1iKmR0Cm05zTdmRBfLK-ms3zp4DA2cUXn?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1iNK4_S-WiAW-IZYYoC0cOTGA3if1a4cs?usp=drive_link"
+  },
+  {
+    "code": "CSE3002",
+    "title": "Artificial Intelligence",
+    "cat1": "https://drive.google.com/drive/folders/1nAHkLqkS9VbLML8jw9dBI4RjprvOU99F?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1nHOeEXgMfQqoDgReZibgbUzk0mJL73-a?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1nHOeEXgMfQqoDgReZibgbUzk0mJL73-a?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1nJTXlSzfnS0xD3-arNoG1u9-o1Um6trN?usp=drive_link"
+  },
+  {
+    "code": "CSE3003",
+    "title": "Computer Networks",
+    "cat1": "https://drive.google.com/drive/folders/18RTAxHofg1ztK62sNj3NIRaBkp0pdlxj?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1yd-9cqexoE0uDPXSBAuUYnX_i3aqu8dG?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1KpaGWyRc3hx-hTynEzkThgSFl2ink2wd?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1jgZJKqVAcw4xH4ryC9ViWPPydW81uOe7?usp=drive_link"
+  },
+  {
+    "code": "CSE3004",
+    "title": "Design and Analysis of Algorithms",
+    "cat1": "https://drive.google.com/drive/folders/11btW8XuH-gXKijznTo1tI1bPJePoJGar?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1Gqf2jrVDrFyDSWsfL3KgI9yzXUQIYw1l?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1dVk4J6FtlOZVLaixptb9OCgQ6Ty0zNyS?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1fqsq4dAzW_MBnvNo8ebGfc_a0BrEHozV?usp=drive_link"
+  },
+  {
+    "code": "CSE3006",
+    "title": "Data Visualization",
+    "cat1": "https://drive.google.com/drive/folders/1JfxlImpD6AlaeWswKT41IYSG5Vk9OMRf?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1JhlMDzDGNHmQYHPzIDeJHSisESOYJrMw?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1Jil6uYCra-huK4xpHGnIO5CAQeGpnxVy?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1JtujpIIedtAWr7xS1MLvAwn4U76finw3?usp=drive_link"
+  },
+  {
+    "code": "CSE3008",
+    "title": "Introduction to Machine Learning",
+    "cat1": "https://drive.google.com/drive/folders/1nJTXlSzfnS0xD3-arNoG1u9-o1Um6trN?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1lUwhu_Kxrf6JkQlP9U1h9jfJRvO28j2p?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1lbhcZGqkxyFWwNz6UreY9dPnbWJLIW1h?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1lj4lZqTx5KNe411rgC-ILnl-q6ANotmG?usp=drive_link"
+  },
+  {
+    "code": "CSE3015",
+    "title": "Natural Language Proccessing",
+    "cat1": "https://drive.google.com/drive/folders/1JS2za4MfIeO_bDbPrgDKIGyP00GmcO8G?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1JUSFwr6rSOkNGbLxfJcbFlNESUloeTWm?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1JUiW6TjsRUJ6Gfsbqt3hneB7HfPepBgu?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1JVMO50vmT4mA9UnEGAa5pWwaeCfJVTgr?usp=drive_link"
+  },
+  {
+    "code": "CSE4006",
+    "title": "Deep Learning",
+    "cat1": "https://drive.google.com/drive/folders/1Kf9SD57S3jZQg9i9PIxlJ3ESCsox4LeM?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1KhrndsSOglZJYv1_57asac-yHET0rDrU?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1KiNstCDYtTBD-g1W5wbP62xkR0wpK1tP?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1KiYPTOKX1_t5hNOB5ZSxRCb94-LTm-Wj?usp=drive_link"
+  },
+  {
+    "code": "CSE4007",
+    "title": "Digital Image Proccessing",
+    "cat1": "https://drive.google.com/drive/folders/1Mybd5ji3L8ZrWSdrJkX5HY4UMK1TNGzQ?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1MypxyiyuhZjjQPbFh0wyD6Nu75Uo5DW1?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1N2V78KUB7mn8piGDfE0yqBLWj-dixCy1?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1N5_v7FUu3xQGSwhhj5GP1pHqpkTv8i1n?usp=drive_link"
+  },
+  {
+    "code": "SWE1002",
+    "title": "Principles of Software Engineering",
+    "cat1": "https://drive.google.com/file/d/1evxcwM7U55A141uyH7b5c3EBTYof9o0v/view?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1eLOKb35A3EY_tEiKjiugS6G6k-jJMOk9?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1eVRKg6ni4B_2JMcyWHZ6l1-_KUFwZNbe?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1eViLoOAcjJ0eaEd7wakbXyU8ps0lWNYE?usp=drive_link"
+  },
+  {
+    "code": "SWE2001",
+    "title": "Data Structures and its Applications",
+    "cat1": "https://drive.google.com/drive/folders/1fKdiMFW-0e5NalVZHeBa2daLNWZQ5v41?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1fL9zpoylI0m3ZAy_BY30WMaeCdXwzEOo?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1fQqsxqCRGig_QpEwMnMJL6BXhd_cgv_5?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1fRfOOy45e9HWypJB7M-qVjVvSJDvtJ81?usp=drive_link"
+  },
+  {
+    "code": "SWE2002",
+    "title": "Human Computer Interaction",
+    "cat1": "https://drive.google.com/drive/folders/12mCikE0TrGLqkc2R90JdCoxfQ4nBt5F-?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/12rnCGChAfK7lLfNw0tnls9_3YAoiQsC-?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/12s7GdqX2dzq1yaIxzRCwVTVstuxenZx2?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/12uccp1yFh9dKTSPOsJ9AaZIG4mtbVrqn?usp=drive_link"
+  },
+  {
+    "code": "SWE2003",
+    "title": "Requirements Engineering Management",
+    "cat1": "https://drive.google.com/drive/folders/14H2WHZMK63ijKdgxdAdLxD176wxqbEMG?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/14C_KLMCLYhdQJpN4zEYTTVlEDhwztvu8?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/14C4ajKpGvZwf4BK-nywQSiGs_CQfjcjF?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/13yUIMXMReJKNy92WYC1-c3HNykHviL3T?usp=drive_link"
+  },
+  {
+    "code": "SWE2004",
+    "title": "Software Design and Architecture",
+    "cat1": "https://drive.google.com/drive/folders/1i1S0xAQWhdQQ7d0V2vkK8txT2Fw7WLhc?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1iILjylgzUcUGCe-4eyYlK2_lUCvXWNMe?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1iKmR0Cm05zTdmRBfLK-ms3zp4DA2cUXn?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1iNK4_S-WiAW-IZYYoC0cOTGA3if1a4cs?usp=drive_link"
+  },
+  {
+    "code": "SWE2006",
+    "title": "Database Systems",
+    "cat1": "https://drive.google.com/drive/folders/1iSFTaHstP-O9jnIA8Rw_t-hCePkzNMXa?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1iX3r5iVMQHH4GjpLuz-O4Ug4tKWAnL14?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1iga1m8jYIWT_V2KJ0-cDg1Q3LZ5zRj7s?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1ihVo7gxNQWJTg2cUG2LroxeE8oZxgDAb?usp=drive_link"
+  },
+  {
+    "code": "SWE2007",
+    "title": "Introduction to Operating Systems",
+    "cat1": "https://drive.google.com/drive/folders/1fhpgSJMa8oQ4LEAJL50zsaUudbQG2B-I?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1fmVB3yVSgocgAuZVt2hEEbcx8v6pqTHF?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1fqEqljk-q7l4xvczydlp-MT3gzfsy89H?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1ftADxa9xVJQOEeBEIqcsqtDoWE_Oze93?usp=drive_link"
+  },
+  {
+    "code": "SWE2008",
+    "title": "OOAD",
+    "cat1": "https://drive.google.com/drive/folders/1JkTm8d1w--lPTqmDxum4GJ4U7V8xxgXn?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1Jkf_jMi5SKpUz_vXUQiFMYQmtNsDt4G-?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1JqX1KWy8YeANdy5VYRqhe8oBBtNJF5Gg?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1K2VRmKzon8rg7NsJRaPze7GnikSy1Ljh?usp=drive_link"
+  },
+  {
+    "code": "SWE2009",
+    "title": "Analysis of Algorithms",
+    "cat1": "https://drive.google.com/drive/folders/1CW50ZsOPE3KSvkHIz7mOEmxmfl4pTKYT?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1cqqUbVXJcfau5lK2f7oH1b8jEbZq3bhO?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1zVkTckawNuhDNfIceraEhQfwEiTRl_ys?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/13Ld0C62bcal5b8JYP9P2kHgdq_WEyN3k?usp=drive_link"
+  },
+  {
+    "code": "SWE3001",
+    "title": "Introduction to Computer Networks",
+    "cat1": "https://drive.google.com/drive/folders/19kgPsdikNDXZHzTb1wXc94MtlZ4C8EhH?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/19nwUh04q4Ek7N4FLVsdDpHmuIedn8LZY?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/19pZpn1WJnzhAkEcDhtJ8-6HZgAlwgMLn?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1A34jo2e2fDSVHuj7Oai0Kctf8HJdWrq5?usp=drive_link"
+  },
+  {
+    "code": "SWE3002",
+    "title": "SWPM",
+    "cat1": "https://drive.google.com/drive/folders/1J6OkNDKwrmxb22T_gkUkbe2amxy7KvUD?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1J9MW0IiAH7UR6LEwVmx_-jUKKnkKPdRC?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1J9yJMIKiPmOzP16F7gbSb4TiVy3R16QG?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1JNULZlEbFGqtofniGXZzGnLD9FzjebDG?usp=drive_link"
+  },
+  {
+    "code": "SWE3004",
+    "title": "Front End Design and Testing",
+    "cat1": "https://drive.google.com/drive/folders/173S6HEMhYwT8ULnSwpbsDrmrR9a3kZOo?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/173S6HEMhYwT8ULnSwpbsDrmrR9a3kZOo?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/173S6HEMhYwT8ULnSwpbsDrmrR9a3kZOo?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/173S6HEMhYwT8ULnSwpbsDrmrR9a3kZOo?usp=drive_link"
+  },
+  {
+    "code": "SWE4001",
+    "title": "Internet and Web Technologies",
+    "cat1": "https://drive.google.com/drive/folders/1hizsJTa1v2sXB74UIkxkMCGx7Xo8vDrN?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1hYfmnaJEtSSk22AoN7SRr4JpEY-Q0JrS?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1hc-d0Hk7Ql87IFkOC1D2G-I29CaY0u9G?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1hw8SVTAd9dxbzmcp_BFEcABnsVMpfKT4?usp=drive_link"
+  },
+  {
+    "code": "MAT1003",
+    "title": "Discrete Mathematical Structures",
+    "cat1": "https://drive.google.com/drive/folders/1dnvXDKIrwGppKepKe2Bq6FVxV2UTzUuQ?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1do6wbmGZpMN8WW5Vk5RFyoAFsg8PJiSn?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1doBvfYu_kSKBQtZo74sLIXgVko8oOWs2?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1ds40ogubTMCpboahP1mpAzJ7GKUG0BiO?usp=drive_link"
+  },
+  {
+    "code": "MAT1007",
+    "title": "Discrete Mathematics",
+    "cat1": "https://drive.google.com/drive/folders/1dLzzFKPbNjjoTb7p8DZECKUQs5oirgJp?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1dPGtNaFtFpIbFVdHN02Tozl4p12vPS7C?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1dPauqaNGVoLEfmLaSiEzclMzmfsPpivv?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1dQody-429AJK7ldvXvSqCvsjextu3MNY?usp=drive_link"
+  },
+  {
+    "code": "MAT1011",
+    "title": "Applied Statistics",
+    "cat1": "https://drive.google.com/drive/folders/1Le4d-jdKShj0IPmE9RDaRpRbdkm2ga_S?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1LfDy1Ya7b42lV44ssEHHF_uiShk_5nbH?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1LhTdfp4HR1LmlTrNnbfAxbiNswXFBETx?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1LhUM7SJa5cagnPsmknHExRBe0NjiKwvO?usp=drive_link"
+  },
+  {
+    "code": "ECE2002",
+    "title": "Computer Organization and Architecture",
+    "cat1": "https://drive.google.com/drive/folders/1LOKaAKNJ9QRuE4ApT9gZum9YQo0WsF7K?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1LXVke1Oh5_O1dRfTL599gXQ8xjcYJytW?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1LbiHfMbujgzrB3Zr9aiQqDPNnCc8aHSl?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1Lckg6CylWjgHa_Rek86DGglrjDZPtxjw?usp=drive_link"
+  },
+  {
+    "code": "ECE2015",
+    "title": "Computer Architecture",
+    "cat1": "https://drive.google.com/drive/folders/1NJtTBK5UBasfHM5oRSPvS3ac5sfMc2Dd?usp=drive_link",
+    "cat2": "https://drive.google.com/drive/folders/1NMk6JSPWNbZdJckuSEVt0dyD7AnnqI1c?usp=drive_link",
+    "fat": "https://drive.google.com/drive/folders/1NNYS3DR_ffG0CCkkpw-HEaRRQCS-XMV3?usp=drive_link",
+    "short": "https://drive.google.com/drive/folders/1NOlt3sG4GQM8IfC0vFF3a8jDf4uM_lj4?usp=drive_link"
+  }
+]

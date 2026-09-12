@@ -1,0 +1,7 @@
+{
+  "name": "EXAM BREAD",
+  "description": "Know the pattern. Master the priority. Own the exam. VIT-AP University academic PYP platform for all students across SAS, SCOPE, SENSE, VSB, and VSL, featuring real Google Drive CAT-1, CAT-2, and FAT question papers and AI priority pattern analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
