@@ -20,6 +20,7 @@ import { AvailablePyqPaper } from '../types.js';
 import { getOrCreatePaperForCourse } from '../data/availablePyps.js';
 import { VIT_AP_COURSES, VitApCourse } from '../data/vitApCourses.js';
 import { VitApLogo } from './VitApLogo.js';
+import { publishedPapersStore } from '../data/publishedPapersStore.js';
 
 interface VPathCourseListProps {
   onOpenAiAnalysis: (paper: AvailablePyqPaper) => void;
@@ -28,6 +29,12 @@ interface VPathCourseListProps {
 export const VPathCourseList: React.FC<VPathCourseListProps> = ({ onOpenAiAnalysis }) => {
   const [activeProgramTab, setActiveProgramTab] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [publishedVer, setPublishedVer] = useState<number>(0);
+
+  // Re-render whenever admin publishes a new paper to Drive
+  React.useEffect(() => {
+    return publishedPapersStore.subscribe(() => setPublishedVer((v) => v + 1));
+  }, []);
 
   const filteredCourses = useMemo(() => {
     return VPATH_COURSES.filter((course) => {
@@ -135,27 +142,36 @@ export const VPathCourseList: React.FC<VPathCourseListProps> = ({ onOpenAiAnalys
 
       {/* Courses Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredCourses.map((course) => (
-          <div
-            key={course.code}
-            className="rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-5 shadow-sm hover:border-amber-500/50 dark:hover:border-amber-500/50 transition-all flex flex-col justify-between space-y-4"
-          >
-            <div>
-              {/* Course Code & Tags */}
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-lg text-xs font-mono font-black bg-stone-100 dark:bg-stone-800 text-amber-600 dark:text-amber-400 border border-stone-200 dark:border-stone-700">
-                    {course.code}
-                  </span>
-                  <span className="px-2 py-0.5 rounded-md text-[10.5px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
-                    {course.school}
+        {filteredCourses.map((course) => {
+          const coursePublished = publishedPapersStore.getForCourse(course.code);
+
+          return (
+            <div
+              key={course.code}
+              className="rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-5 shadow-sm hover:border-amber-500/50 dark:hover:border-amber-500/50 transition-all flex flex-col justify-between space-y-4"
+            >
+              <div>
+                {/* Course Code & Tags */}
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2.5 py-1 rounded-lg text-xs font-mono font-black bg-stone-100 dark:bg-stone-800 text-amber-600 dark:text-amber-400 border border-stone-200 dark:border-stone-700">
+                      {course.code}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md text-[10.5px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                      {course.school}
+                    </span>
+                    {coursePublished.length > 0 && (
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" />
+                        {coursePublished.length} New Paper Published in Drive
+                      </span>
+                    )}
+                  </div>
+
+                  <span className="text-[11px] font-medium text-stone-400">
+                    {course.category}
                   </span>
                 </div>
-
-                <span className="text-[11px] font-medium text-stone-400">
-                  {course.category}
-                </span>
-              </div>
 
               {/* Title */}
               <h3 className="text-base font-bold text-stone-900 dark:text-white leading-snug">
@@ -253,18 +269,42 @@ export const VPathCourseList: React.FC<VPathCourseListProps> = ({ onOpenAiAnalys
               )}
             </div>
 
-            {/* Analysis Trigger Button */}
-            <div className="pt-2">
-              <button
-                onClick={() => handleLaunchAnalysis(course, 'fat')}
-                className="w-full py-2 px-3 rounded-xl bg-stone-100 hover:bg-amber-500/15 dark:bg-stone-800 dark:hover:bg-amber-500/20 text-stone-700 dark:text-stone-300 hover:text-amber-700 dark:hover:text-amber-300 border border-stone-200 dark:border-stone-700 hover:border-amber-500/40 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95"
-              >
-                <BarChart3 className="w-3.5 h-3.5 text-amber-500" />
-                <span>Question Frequency & Marks Analysis</span>
-              </button>
+              {/* Published Paper Download Links if any */}
+              {coursePublished.length > 0 && (
+                <div className="pt-2 border-t border-emerald-500/20">
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block mb-1">
+                    Recently Added to Drive by Admin:
+                  </span>
+                  <div className="space-y-1">
+                    {coursePublished.map((pub) => (
+                      <a
+                        key={pub.id}
+                        href={pub.driveLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold flex items-center justify-between transition-colors"
+                      >
+                        <span>{pub.fileName} ({pub.examType.toUpperCase()})</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Analysis Trigger Button */}
+              <div className="pt-2">
+                <button
+                  onClick={() => handleLaunchAnalysis(course, 'fat')}
+                  className="w-full py-2 px-3 rounded-xl bg-stone-100 hover:bg-amber-500/15 dark:bg-stone-800 dark:hover:bg-amber-500/20 text-stone-700 dark:text-stone-300 hover:text-amber-700 dark:hover:text-amber-300 border border-stone-200 dark:border-stone-700 hover:border-amber-500/40 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all active:scale-95"
+                >
+                  <BarChart3 className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Question Frequency & Marks Analysis</span>
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

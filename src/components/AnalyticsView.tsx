@@ -22,7 +22,7 @@ import {
   ArrowRight,
   X,
 } from 'lucide-react';
-import { QuestionFamily } from '../types.js';
+import { Paper, Question, QuestionFamily } from '../types.js';
 
 interface AnalyticsViewProps {
   topicFrequency: { name: string; frequency: number; totalMarks: number; difficulty: string }[];
@@ -42,6 +42,10 @@ interface AnalyticsViewProps {
   }[];
   questionFamilies: QuestionFamily[];
   onNavigateToTopic: (topicName: string) => void;
+  userPapers?: Paper[];
+  userQuestions?: Question[];
+  initialCourseCode?: string;
+  onNavigateToUpload?: () => void;
 }
 
 export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
@@ -51,6 +55,10 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
   heatmap,
   questionFamilies,
   onNavigateToTopic,
+  userPapers,
+  userQuestions,
+  initialCourseCode,
+  onNavigateToUpload,
 }) => {
   const [selectedHeatmapCell, setSelectedHeatmapCell] = useState<{
     topic: string;
@@ -62,13 +70,27 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
 
   return (
     <div id="analytics-view" className="space-y-8 max-w-7xl mx-auto pb-12">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-          <span>Deterministic Exam Analytics & Patterns</span>
-        </h1>
-        <p className="text-sm text-stone-400 mt-1">
-          Ground-truth mathematical charts calculated across all 5 evaluated previous-year question papers.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
+            <span>Deterministic Exam Analytics & Patterns</span>
+          </h1>
+          <p className="text-sm text-stone-400 mt-1">
+            Ground-truth mathematical charts calculated across all evaluated previous-year question papers.
+          </p>
+        </div>
+
+        {onNavigateToUpload && (
+          <button
+            type="button"
+            onClick={onNavigateToUpload}
+            className="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs flex items-center gap-2 shadow-sm transition-all active:scale-95 shrink-0 self-start sm:self-auto"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Upload Question Paper</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
 
       {/* TOPIC FREQUENCY BAR CHART */}

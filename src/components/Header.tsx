@@ -21,7 +21,7 @@ import { ExamBreadLogo } from './ExamBreadLogo.js';
 interface HeaderProps {
   user: User | null;
   onOpenSearch: () => void;
-  onToggleAi: () => void;
+  onToggleAi?: () => void;
   onLoadDemo: () => void;
   notifications: NotificationItem[];
   onMarkNotificationRead: (id: string) => void;
@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Middle / Right: Maintainer attribution, Theme Switch, Search, AI Coach, Notifications, Demo button */}
+      {/* Middle / Right: Maintainer attribution, Theme Switch, Search, Notifications, Demo button */}
       <div className="flex items-center gap-2 sm:gap-3">
         {/* Maintained by Bhanu on Top Right Corner as requested */}
         <a
@@ -128,17 +128,6 @@ export const Header: React.FC<HeaderProps> = ({
           ) : (
             <Moon className="w-4 h-4 text-stone-700" />
           )}
-        </button>
-
-        {/* AI Assistant button */}
-        <button
-          id="btn-ai-assistant"
-          onClick={onToggleAi}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-stone-950 font-bold text-xs shadow-sm transition-all transform active:scale-95"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-stone-950 fill-stone-950" />
-          <span className="hidden sm:inline">Ask AI Coach</span>
-          <span className="sm:hidden">AI</span>
         </button>
 
         {/* Home Button shortcut */}

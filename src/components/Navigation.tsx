@@ -5,6 +5,7 @@ import {
   HelpCircle,
   Layers,
   BarChart3,
+  BrainCircuit,
   Award,
   AlertTriangle,
   Crosshair,
@@ -19,6 +20,7 @@ import {
   Sun,
   Moon,
   ExternalLink,
+  UserCheck,
 } from 'lucide-react';
 import { User } from '../types.js';
 import { useTheme } from '../context/ThemeContext.js';
@@ -29,7 +31,7 @@ interface NavigationProps {
   currentTab: string;
   onSelectTab: (tab: string) => void;
   user: User | null;
-  onOpenDiagnostic: () => void;
+  onOpenDiagnostic?: () => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({
@@ -42,19 +44,11 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const navItems = [
     { id: 'landing', label: 'Home Screen', icon: Home },
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'upload', label: 'Upload PYQs', icon: UploadCloud, badge: '5 Years' },
-    { id: 'questions', label: 'Questions', icon: HelpCircle },
-    { id: 'topics', label: 'Topics', icon: Layers },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'examiner-insights', label: 'Examiner Insights', icon: Award },
-    { id: 'weakness', label: 'Weakness', icon: AlertTriangle },
-    { id: 'priority-matrix', label: 'Priority Matrix', icon: Crosshair },
-    { id: 'study-plan', label: '7-Day Plan', icon: Calendar },
-    { id: 'practice', label: 'Practice Mode', icon: PenTool },
-    { id: 'mock-test', label: 'Mock Test', icon: GraduationCap },
-    { id: 'progress', label: 'Progress', icon: TrendingUp },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'dashboard', label: 'Dashboard & Analysis', icon: LayoutDashboard },
+    { id: 'study-plan', label: '7-Day Roadmap', icon: Calendar, badge: 'CAT & FAT' },
+    { id: 'mock-test', label: 'Mock Test (PYPs)', icon: GraduationCap, badge: 'Evaluate' },
+    { id: 'progress', label: 'Progress & History', icon: TrendingUp },
+    { id: 'upload', label: 'Upload Paper', icon: UploadCloud, badge: 'Open Access' },
   ];
 
   return (
@@ -84,55 +78,25 @@ export const Navigation: React.FC<NavigationProps> = ({
           </div>
         </div>
 
-        {/* VIT-AP University Campus Badge */}
-        <div className="px-4 pt-3 pb-1">
+        {/* VIT-AP University Campus Badge (No floating streak) */}
+        <div className="px-4 pt-3 pb-2">
           <div className="p-3 rounded-xl bg-gradient-to-br from-[#002147]/10 via-[#0B2545]/5 to-transparent dark:from-[#002147]/40 dark:via-[#0B2545]/20 border border-[#002147]/20 dark:border-blue-500/30 space-y-2">
             <VitApLogo size="sm" showSubtitle={true} />
             <div className="flex items-center justify-between pt-1 border-t border-stone-200/60 dark:border-stone-800">
               <span className="text-[10px] text-stone-500 dark:text-stone-400 font-semibold">
-                School of Computer Science & Eng.
+                University Examination Portal
               </span>
               <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">
-                SCOPE
+                VIT-AP
               </span>
             </div>
-          </div>
-        </div>
-
-        {/* Streak & Exam Target Pill */}
-        <div className="px-4 pt-4 pb-2">
-          <div
-            id="streak-status-card"
-            className="rounded-xl bg-stone-100 dark:bg-stone-800/60 border border-stone-200 dark:border-stone-700/60 p-3 flex items-center justify-between"
-          >
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-500">
-                <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
-              </div>
-              <div>
-                <div className="text-xs font-semibold text-stone-800 dark:text-stone-200">
-                  {user?.streakDays || 7} Day Streak
-                </div>
-                <div className="text-[11px] text-stone-500 dark:text-stone-400">
-                  {user?.examName || 'Operating Systems'}
-                </div>
-              </div>
-            </div>
-            <button
-              id="btn-quick-diagnostic"
-              onClick={onOpenDiagnostic}
-              title="Test diagnostic weakness"
-              className="text-[10px] font-semibold px-2 py-1 rounded-md bg-amber-500 text-stone-950 hover:bg-amber-400 transition-colors shadow-sm active:scale-95"
-            >
-              Test
-            </button>
           </div>
         </div>
 
         {/* Navigation List */}
-        <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
-          <div className="px-3 py-1.5 text-[11px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-wider">
-            Exam Intelligence
+        <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1.5">
+          <div className="px-3 py-1 text-[11px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-wider">
+            Menu
           </div>
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -157,7 +121,11 @@ export const Navigation: React.FC<NavigationProps> = ({
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
-                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400">
+                  <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                    isActive
+                      ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                      : 'bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400'
+                  }`}>
                     {item.badge}
                   </span>
                 )}
@@ -166,19 +134,20 @@ export const Navigation: React.FC<NavigationProps> = ({
           })}
         </div>
 
-        {/* User Card & Quick Theme Toggle in Footer */}
+        {/* Guest Student Mode & Quick Theme Toggle in Footer (Below Upload Option) */}
         <div className="p-3 border-t border-stone-200 dark:border-stone-800">
-          <div className="flex items-center justify-between p-2 rounded-xl bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-800">
+          <div className="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-800">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center font-bold text-xs text-amber-700 dark:text-amber-300 shrink-0">
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'S'}
+              <div className="w-8 h-8 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center font-bold text-xs text-emerald-600 dark:text-emerald-400 shrink-0">
+                <UserCheck className="w-4 h-4" />
               </div>
               <div className="min-w-0">
-                <div className="text-xs font-semibold text-stone-900 dark:text-stone-200 truncate">
-                  {user?.name || 'Student User'}
+                <div className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate flex items-center gap-1.5">
+                  <span>Guest Student</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 </div>
                 <div className="text-[10px] text-stone-500 dark:text-stone-400 truncate">
-                  {user?.email || 'student@university.edu'}
+                  Open Access • VIT-AP Portal
                 </div>
               </div>
             </div>
@@ -198,64 +167,62 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
       </aside>
 
-      {/* Mobile Bottom Navigation */}
+      {/* Mobile Bottom Navigation - Mobile-Optimized Bar with Touch Targets >= 44px */}
       <nav
         id="mobile-bottom-nav"
-        className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-stone-900/95 backdrop-blur border-t border-stone-200 dark:border-stone-800 z-40 px-2 py-1.5 flex items-center justify-around shadow-lg transition-colors duration-200"
+        className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-stone-900/95 backdrop-blur border-t border-stone-200 dark:border-stone-800 z-40 px-2 py-1.5 flex items-center justify-around shadow-2xl transition-colors duration-200"
       >
         <button
           onClick={() => onSelectTab('landing')}
-          className={`flex flex-col items-center py-1 px-2 rounded-lg text-[10px] font-medium ${
-            currentTab === 'landing' ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-stone-500 dark:text-stone-400'
+          className={`flex flex-col items-center justify-center min-w-[52px] min-h-[44px] py-1 px-1.5 rounded-lg text-[10px] font-medium transition-all active:scale-95 ${
+            currentTab === 'landing' ? 'text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10' : 'text-stone-500 dark:text-stone-400'
           }`}
         >
           <Home className="w-4 h-4 mb-0.5" />
-          Home
+          <span>Home</span>
         </button>
+
         <button
           onClick={() => onSelectTab('dashboard')}
-          className={`flex flex-col items-center py-1 px-2 rounded-lg text-[10px] font-medium ${
-            currentTab === 'dashboard' ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-stone-500 dark:text-stone-400'
+          className={`flex flex-col items-center justify-center min-w-[52px] min-h-[44px] py-1 px-1.5 rounded-lg text-[10px] font-medium transition-all active:scale-95 ${
+            currentTab === 'dashboard' ? 'text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10' : 'text-stone-500 dark:text-stone-400'
           }`}
         >
           <LayoutDashboard className="w-4 h-4 mb-0.5" />
-          Dashboard
+          <span>Dashboard</span>
         </button>
-        <button
-          onClick={() => onSelectTab('upload')}
-          className={`flex flex-col items-center py-1 px-2 rounded-lg text-[10px] font-medium ${
-            currentTab === 'upload' ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-stone-500 dark:text-stone-400'
-          }`}
-        >
-          <UploadCloud className="w-4 h-4 mb-0.5" />
-          PYPs
-        </button>
-        <button
-          onClick={() => onSelectTab('questions')}
-          className={`flex flex-col items-center py-1 px-2 rounded-lg text-[10px] font-medium ${
-            currentTab === 'questions' ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-stone-500 dark:text-stone-400'
-          }`}
-        >
-          <HelpCircle className="w-4 h-4 mb-0.5" />
-          Questions
-        </button>
+
+        {/* 7-Day Roadmap replaces Study Mode */}
         <button
           onClick={() => onSelectTab('study-plan')}
-          className={`flex flex-col items-center py-1 px-2 rounded-lg text-[10px] font-medium ${
-            currentTab === 'study-plan' ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-stone-500 dark:text-stone-400'
+          className={`flex flex-col items-center justify-center min-w-[62px] min-h-[44px] py-1 px-2 rounded-xl text-[10px] font-bold transition-all active:scale-95 ${
+            currentTab === 'study-plan'
+              ? 'bg-amber-500 text-stone-950 shadow-md shadow-amber-500/20'
+              : 'text-amber-600 dark:text-amber-400 bg-amber-500/15 border border-amber-500/30'
           }`}
         >
           <Calendar className="w-4 h-4 mb-0.5" />
-          7-Day Plan
+          <span>Roadmap</span>
         </button>
+
         <button
-          onClick={() => onSelectTab('practice')}
-          className={`flex flex-col items-center py-1 px-2 rounded-lg text-[10px] font-medium ${
-            currentTab === 'practice' ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-stone-500 dark:text-stone-400'
+          onClick={() => onSelectTab('mock-test')}
+          className={`flex flex-col items-center justify-center min-w-[52px] min-h-[44px] py-1 px-1.5 rounded-lg text-[10px] font-medium transition-all active:scale-95 ${
+            currentTab === 'mock-test' ? 'text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10' : 'text-stone-500 dark:text-stone-400'
           }`}
         >
-          <PenTool className="w-4 h-4 mb-0.5" />
-          Practice
+          <GraduationCap className="w-4 h-4 mb-0.5" />
+          <span>Mock Test</span>
+        </button>
+
+        <button
+          onClick={() => onSelectTab('upload')}
+          className={`flex flex-col items-center justify-center min-w-[52px] min-h-[44px] py-1 px-1.5 rounded-lg text-[10px] font-medium transition-all active:scale-95 ${
+            currentTab === 'upload' ? 'text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10' : 'text-stone-500 dark:text-stone-400'
+          }`}
+        >
+          <UploadCloud className="w-4 h-4 mb-0.5" />
+          <span>Upload</span>
         </button>
       </nav>
     </>

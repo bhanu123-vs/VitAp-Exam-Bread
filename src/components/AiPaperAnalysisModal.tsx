@@ -7,7 +7,6 @@ import {
   Award,
   BookOpen,
   Download,
-  Send,
   CheckCircle2,
   AlertTriangle,
   Lightbulb,
@@ -16,7 +15,6 @@ import {
   User,
   ArrowRight,
   TrendingUp,
-  BrainCircuit,
 } from 'lucide-react';
 import { AvailablePyqPaper, ExamType } from '../types.js';
 import { generatePaperPriorityAnalysis } from '../utils/aiAnalysisGenerator.js';
@@ -39,10 +37,7 @@ export const AiPaperAnalysisModal: React.FC<AiPaperAnalysisModalProps> = ({
   onClose,
   onStartPractice,
 }) => {
-  const [activeSubTab, setActiveSubTab] = useState<'priority' | 'graph' | 'patterns' | 'timing' | 'ask_ai'>('graph');
-  const [userQuery, setUserQuery] = useState('');
-  const [isAskingAi, setIsAskingAi] = useState(false);
-  const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string }>>([]);
+  const [activeSubTab, setActiveSubTab] = useState<'priority' | 'graph' | 'patterns' | 'timing'>('graph');
   const [isDownloading, setIsDownloading] = useState(false);
 
   if (!isOpen || !paper) return null;
@@ -64,50 +59,6 @@ export const AiPaperAnalysisModal: React.FC<AiPaperAnalysisModalProps> = ({
   };
 
   const examBadge = getExamBadge(paper.examType);
-
-  const handleSendAiQuery = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!userQuery.trim() || isAskingAi) return;
-
-    const query = userQuery.trim();
-    setUserQuery('');
-    setChatMessages((prev) => [...prev, { sender: 'user', text: query }]);
-    setIsAskingAi(true);
-
-    try {
-      const response = await fetch('/api/ai/ask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question: `Regarding ${paper.courseName} (${paper.courseCode}) for ${paper.year} ${examBadge.label}: ${query}`,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setChatMessages((prev) => [...prev, { sender: 'ai', text: data.text }]);
-      } else {
-        // High quality deterministic answer fallback
-        setChatMessages((prev) => [
-          ...prev,
-          {
-            sender: 'ai',
-            text: `For ${paper.courseName} (${paper.courseCode}) in ${examBadge.label}, focus your preparation on: 1) ${analysis.topPriorityTopics[0]?.topic} (${analysis.topPriorityTopics[0]?.priorityScore}/100 Priority Score) which accounts for ${analysis.topPriorityTopics[0]?.totalHistoricalMarks} marks, and 2) ${analysis.topPriorityTopics[1]?.topic}. Master the numerical problem formulation and step-by-step derivations first.`,
-          },
-        ]);
-      }
-    } catch {
-      setChatMessages((prev) => [
-        ...prev,
-        {
-          sender: 'ai',
-          text: `Based on verified historical papers for ${paper.courseCode}, the highest yield topic is ${analysis.topPriorityTopics[0]?.topic}. Allocate at least ${analysis.topPriorityTopics[0]?.recommendedTimeMinutes} minutes to practice step-by-step solutions for this topic.`,
-        },
-      ]);
-    } finally {
-      setIsAskingAi(false);
-    }
-  };
 
   const handleDownload = async () => {
     setIsDownloading(true);
@@ -138,8 +89,8 @@ export const AiPaperAnalysisModal: React.FC<AiPaperAnalysisModalProps> = ({
                   {paper.year}
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                  <BrainCircuit className="w-3.5 h-3.5" />
-                  <span>AI Pattern Analyzed</span>
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Pattern Analyzed</span>
                 </span>
               </div>
 
@@ -208,18 +159,6 @@ export const AiPaperAnalysisModal: React.FC<AiPaperAnalysisModalProps> = ({
             >
               <Clock className="w-4 h-4" />
               <span>Exam Timing & Pacing</span>
-            </button>
-
-            <button
-              onClick={() => setActiveSubTab('ask_ai')}
-              className={`px-3.5 py-2 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-colors border-b-2 whitespace-nowrap ${
-                activeSubTab === 'ask_ai'
-                  ? 'border-amber-500 text-amber-600 dark:text-amber-400 bg-white dark:bg-stone-900'
-                  : 'border-transparent text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
-              }`}
-            >
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Ask AI Coach</span>
             </button>
           </div>
         </div>
@@ -429,91 +368,6 @@ export const AiPaperAnalysisModal: React.FC<AiPaperAnalysisModalProps> = ({
                   </p>
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* TAB 4: ASK AI COACH */}
-          {activeSubTab === 'ask_ai' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-amber-500" />
-                  <span className="text-xs font-bold text-stone-900 dark:text-white uppercase tracking-wider">
-                    Instant AI Exam Coach for {paper.courseName}
-                  </span>
-                </div>
-                <span className="text-[11px] text-stone-500 font-mono">
-                  Powered by Gemini 3.8 Flash
-                </span>
-              </div>
-
-              {/* Chat Message Box */}
-              <div className="min-h-[220px] max-h-[300px] overflow-y-auto space-y-3 p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700/80">
-                {chatMessages.length === 0 ? (
-                  <div className="text-center py-8 text-stone-500 text-xs sm:text-sm space-y-2">
-                    <BrainCircuit className="w-8 h-8 mx-auto text-stone-400" />
-                    <p>Ask anything about {paper.courseName} ({paper.courseCode})!</p>
-                    <div className="flex flex-wrap justify-center gap-2 pt-2">
-                      <button
-                        onClick={() => setUserQuery(`Which question is most frequently repeated in ${examBadge.label}?`)}
-                        className="px-2.5 py-1 rounded-lg bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs hover:bg-amber-500/20 hover:text-amber-500 transition-colors"
-                      >
-                        "Which question is most repeated?"
-                      </button>
-                      <button
-                        onClick={() => setUserQuery(`What are the step-by-step formulas for ${analysis.topPriorityTopics[0]?.topic}?`)}
-                        className="px-2.5 py-1 rounded-lg bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs hover:bg-amber-500/20 hover:text-amber-500 transition-colors"
-                      >
-                        "Formulas for {analysis.topPriorityTopics[0]?.topic}"
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  chatMessages.map((msg, mIdx) => (
-                    <div
-                      key={mIdx}
-                      className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div
-                        className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed ${
-                          msg.sender === 'user'
-                            ? 'bg-amber-500 text-stone-950 font-medium'
-                            : 'bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-800 dark:text-stone-200 shadow-sm'
-                        }`}
-                      >
-                        {msg.text}
-                      </div>
-                    </div>
-                  ))
-                )}
-                {isAskingAi && (
-                  <div className="flex justify-start">
-                    <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl px-4 py-2.5 text-xs text-stone-500 flex items-center gap-2">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-spin" />
-                      <span>Analyzing pattern data...</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Chat Input */}
-              <form onSubmit={handleSendAiQuery} className="flex gap-2">
-                <input
-                  type="text"
-                  value={userQuery}
-                  onChange={(e) => setUserQuery(e.target.value)}
-                  placeholder={`Ask a question about ${paper.courseName}...`}
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs sm:text-sm text-stone-900 dark:text-white placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                />
-                <button
-                  type="submit"
-                  disabled={!userQuery.trim() || isAskingAi}
-                  className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-stone-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-md active:scale-95"
-                >
-                  <span>Ask</span>
-                  <Send className="w-3.5 h-3.5" />
-                </button>
-              </form>
             </div>
           )}
         </div>

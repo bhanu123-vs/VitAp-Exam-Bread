@@ -26,6 +26,7 @@ import { QuestionsView } from './components/QuestionsView.js';
 import { AnalyticsView } from './components/AnalyticsView.js';
 import { PriorityMatrixView } from './components/PriorityMatrixView.js';
 import { StudyPlanView } from './components/StudyPlanView.js';
+import { SevenDayRoadmapView } from './components/SevenDayRoadmapView.js';
 import { PracticeView } from './components/PracticeView.js';
 import { MockTestView } from './components/MockTestView.js';
 import { WeaknessView } from './components/WeaknessView.js';
@@ -36,13 +37,14 @@ import { SettingsView } from './components/SettingsView.js';
 
 // Modals & Drawers
 import { DiagnosticModal } from './components/DiagnosticModal.js';
-import { AiAssistantDrawer } from './components/AiAssistantDrawer.js';
 import { GlobalSearchModal } from './components/GlobalSearchModal.js';
+import { FooterCaution } from './components/FooterCaution.js';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<NavTab>('landing');
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedIntelligenceCourse, setSelectedIntelligenceCourse] = useState<string>('CSE1001');
 
   // State data
   const [papers, setPapers] = useState<Paper[]>([]);
@@ -76,7 +78,6 @@ export default function App() {
 
   // Modals & interactive flows
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState<boolean>(false);
-  const [isAiAssistantOpen, setIsAiAssistantOpen] = useState<boolean>(false);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [practiceTopic, setPracticeTopic] = useState<string | undefined>(undefined);
 
@@ -89,15 +90,35 @@ export default function App() {
     try {
       setLoading(true);
       const summary = await api.getSummary();
-      setUser(summary.user);
-      setSummaryStats(summary.stats);
-      setPriorities(summary.topPriorities || []);
-      setInsights(summary.examinerInsights || []);
-      setStudyPlan(summary.studyPlanDays || []);
-
-      if (summary.user) {
-        await refreshAllData();
+      if (summary) {
+        if (summary.user) setUser(summary.user);
+        const cards = summary.summaryCards || summary.stats;
+        if (cards) {
+          setSummaryStats({
+            pyqsAnalyzed: cards.pyqsAnalyzed ?? cards.totalPapers ?? 5,
+            questionsFound: cards.questionsFound ?? cards.totalQuestions ?? 143,
+            topicsIdentified: cards.topicsIdentified ?? cards.totalTopics ?? 31,
+            highPriorityTopics: cards.highPriorityTopics ?? cards.highYieldTopicsCount ?? 8,
+            preparationScore: cards.preparationScore ?? 68,
+            studyStreak: summary.user?.streakDays ?? cards.studyStreak ?? 5,
+            totalPapers: cards.pyqsAnalyzed ?? cards.totalPapers ?? 5,
+            totalQuestions: cards.questionsFound ?? cards.totalQuestions ?? 143,
+            totalTopics: cards.topicsIdentified ?? cards.totalTopics ?? 31,
+            highYieldTopicsCount: cards.highPriorityTopics ?? cards.highYieldTopicsCount ?? 8,
+          });
+        }
+        if (summary.priorities || summary.topPriorities) {
+          setPriorities(summary.priorities || summary.topPriorities || []);
+        }
+        if (summary.examinerInsights) {
+          setInsights(summary.examinerInsights || []);
+        }
+        if (summary.studyPlan || summary.studyPlanDays) {
+          setStudyPlan(summary.studyPlan || summary.studyPlanDays || []);
+        }
       }
+
+      await refreshAllData();
     } catch (e) {
       console.error('Error initializing app:', e);
     } finally {
@@ -243,13 +264,24 @@ export default function App() {
     return (
       <div className="min-h-screen bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 font-sans antialiased selection:bg-amber-500 selection:text-stone-950 transition-colors duration-200">
         <LandingPage
-          onGetStarted={() => {
-            if (!user) handleLaunchDemo();
-            setActiveTab('upload');
+          onOpenDashboard={async () => {
+            if (!user) await handleLaunchDemo();
+            setActiveTab('dashboard');
           }}
-          onTryDemo={handleLaunchDemo}
-          onUploadPyps={() => {
-            if (!user) handleLaunchDemo();
+          onOpenRoadmap={async () => {
+            if (!user) await handleLaunchDemo();
+            setActiveTab('study-plan');
+          }}
+          onGetStarted={async () => {
+            if (!user) await handleLaunchDemo();
+            setActiveTab('dashboard');
+          }}
+          onTryDemo={async () => {
+            await handleLaunchDemo();
+            setActiveTab('dashboard');
+          }}
+          onUploadPyps={async () => {
+            if (!user) await handleLaunchDemo();
             setActiveTab('upload');
           }}
           onAnalyzePaper={async (paper) => {
@@ -266,7 +298,7 @@ export default function App() {
               fileSize: 2200000,
             });
             await refreshAllData();
-            setActiveTab('questions');
+            setActiveTab('dashboard');
           }}
           onDirectUpload={async (payload) => {
             if (!user) await handleLaunchDemo();
@@ -301,7 +333,6 @@ export default function App() {
       <Header
         user={user}
         onOpenSearch={() => setIsSearchOpen(true)}
-        onToggleAi={() => setIsAiAssistantOpen(true)}
         onLoadDemo={handleLaunchDemo}
         notifications={notifications}
         onMarkNotificationRead={async (id) => {
@@ -310,7 +341,7 @@ export default function App() {
             prev.map((n) => (n.id === id ? { ...n, read: true } : n))
           );
         }}
-        activeExamTitle={user?.examName || 'Operating Systems (CS301)'}
+        activeExamTitle={user?.examName || 'VIT-AP Course Examinations'}
         onNavigateHome={() => setActiveTab('landing')}
       />
 
@@ -332,12 +363,12 @@ export default function App() {
             <DashboardView
               user={user}
               summaryCards={{
-                pyqsAnalyzed: summaryStats.totalPapers,
-                questionsFound: summaryStats.totalQuestions,
-                topicsIdentified: summaryStats.totalTopics,
-                highPriorityTopics: summaryStats.highYieldTopicsCount,
-                preparationScore: summaryStats.preparationScore,
-                studyStreak: user?.streakDays || 5,
+                pyqsAnalyzed: summaryStats?.pyqsAnalyzed ?? summaryStats?.totalPapers ?? 5,
+                questionsFound: summaryStats?.questionsFound ?? summaryStats?.totalQuestions ?? 143,
+                topicsIdentified: summaryStats?.topicsIdentified ?? summaryStats?.totalTopics ?? 31,
+                highPriorityTopics: summaryStats?.highPriorityTopics ?? summaryStats?.highYieldTopicsCount ?? 8,
+                preparationScore: summaryStats?.preparationScore ?? 68,
+                studyStreak: user?.streakDays || summaryStats?.studyStreak || 5,
               }}
               whatToStudyNow={{
                 topic: priorities[0]?.topic || 'Deadlocks',
@@ -398,15 +429,11 @@ export default function App() {
           )}
 
           {activeTab === 'study-plan' && (
-            <StudyPlanView
-              plan={studyPlan}
-              dailyHours={user?.dailyStudyHours || 2}
-              completedCount={completedTaskCount}
-              onUpdateDailyHours={handleUpdateDailyHours}
-              onToggleTask={handleToggleTask}
-              onSkipTask={handleSkipTask}
-              onRegeneratePlan={handleRegeneratePlan}
-              onStartPracticeTopic={handleStartPracticeTopic}
+            <SevenDayRoadmapView
+              initialCourseCode={selectedIntelligenceCourse || 'CSE1001'}
+              onNavigateToPaper={() => {
+                setActiveTab('upload');
+              }}
             />
           )}
 
@@ -421,9 +448,12 @@ export default function App() {
 
           {activeTab === 'mock-test' && (
             <MockTestView
+              initialCourseCode={selectedIntelligenceCourse || 'CSE1001'}
               onTestCompleted={async () => {
                 await refreshAllData();
               }}
+              onNavigateToDashboard={() => setActiveTab('dashboard')}
+              onNavigateToRoadmap={() => setActiveTab('study-plan')}
             />
           )}
 
@@ -498,12 +528,12 @@ export default function App() {
             <DashboardView
               user={user}
               summaryCards={{
-                pyqsAnalyzed: summaryStats.totalPapers,
-                questionsFound: summaryStats.totalQuestions,
-                topicsIdentified: summaryStats.totalTopics,
-                highPriorityTopics: summaryStats.highYieldTopicsCount,
-                preparationScore: summaryStats.preparationScore,
-                studyStreak: user?.streakDays || 5,
+                pyqsAnalyzed: summaryStats?.pyqsAnalyzed ?? summaryStats?.totalPapers ?? 5,
+                questionsFound: summaryStats?.questionsFound ?? summaryStats?.totalQuestions ?? 143,
+                topicsIdentified: summaryStats?.topicsIdentified ?? summaryStats?.totalTopics ?? 31,
+                highPriorityTopics: summaryStats?.highPriorityTopics ?? summaryStats?.highYieldTopicsCount ?? 8,
+                preparationScore: summaryStats?.preparationScore ?? 68,
+                studyStreak: user?.streakDays || summaryStats?.studyStreak || 5,
               }}
               whatToStudyNow={{
                 topic: priorities[0]?.topic || 'Deadlocks',
@@ -521,6 +551,9 @@ export default function App() {
               onOpenDiagnostic={() => setIsDiagnosticOpen(true)}
             />
           )}
+
+          {/* AI Analysis Disclaimer & Author Notice at end of page */}
+          <FooterCaution />
         </main>
       </div>
 
@@ -531,11 +564,6 @@ export default function App() {
         onCompleted={async () => {
           await refreshAllData();
         }}
-      />
-
-      <AiAssistantDrawer
-        isOpen={isAiAssistantOpen}
-        onClose={() => setIsAiAssistantOpen(false)}
       />
 
       <GlobalSearchModal

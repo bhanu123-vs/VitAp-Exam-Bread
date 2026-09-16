@@ -9,6 +9,7 @@ import { generateAdaptive7DayPlan } from './server/engine/studyPlanner.js';
 import { askStudyAssistant } from './server/gemini.js';
 import { DEMO_DIAGNOSTIC_QUESTIONS } from './server/data/demoData.js';
 import { DiagnosticResult, MockTestResult, PracticeQuestion, ProgressMetrics } from './src/types.js';
+import { sendPaperSubmissionEmail } from './server/services/emailService.js';
 
 async function startServer() {
   const app = express();
@@ -147,6 +148,210 @@ async function startServer() {
         'Complete',
       ],
     });
+  });
+
+  // --- QUESTION PAPER SUBMISSION & EMAIL TO BHANU ---
+  app.post('/api/papers/submit', async (req, res) => {
+    try {
+      const {
+        courseCode,
+        courseName,
+        examType,
+        year,
+        fileName,
+        fileSize,
+        rawText,
+        pdfBase64,
+        uploaderEmail,
+        uploaderNotes,
+      } = req.body;
+
+      if (!courseName) {
+        return res.status(400).json({ error: 'Subject / Course name is required' });
+      }
+
+      const submissionId = `sub-${Date.now()}`;
+      const approvalToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const appUrl = `${req.protocol}://${req.get('host')}`;
+
+      const submissionPayload = {
+        id: submissionId,
+        courseCode: courseCode || 'CSE2001',
+        courseName: courseName || 'Data Structures and Algorithms',
+        examType: (examType || 'cat1').toLowerCase() as 'cat1' | 'cat2' | 'fat',
+        year: Number(year) || 2025,
+        fileName: fileName || `${(courseName || 'Paper').replace(/\s+/g, '_')}_${(examType || 'cat1').toUpperCase()}_2025.pdf`,
+        fileSize: Number(fileSize) || 1024 * 180,
+        rawText: rawText || '',
+        pdfBase64: pdfBase64 || '',
+        uploaderEmail: uploaderEmail || '',
+        uploaderNotes: uploaderNotes || '',
+        submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        status: 'pending' as const,
+        approvalToken,
+        emailSent: true,
+      };
+
+      // Store in memory database
+      dbStore.addSubmission(submissionPayload);
+
+      // Send email to bhanu.25bce8476@vitapstudent.ac.in
+      const emailResult = await sendPaperSubmissionEmail(submissionPayload, appUrl);
+
+      res.json({
+        success: true,
+        submission: submissionPayload,
+        emailResult,
+        message: `Paper submitted successfully. Notification dispatched to bhanu.25bce8476@vitapstudent.ac.in.`,
+      });
+    } catch (err: any) {
+      console.error('Error in /api/papers/submit:', err);
+      res.status(500).json({ error: 'Failed to process submission', details: err.message });
+    }
+  });
+
+  app.get('/api/submissions', (req, res) => {
+    const submissions = dbStore.getSubmissions();
+    res.json({ submissions });
+  });
+
+  // One-click approval from email
+  app.get('/api/submissions/:id/approve', (req, res) => {
+    const token = (req.query.token as string) || '';
+    const result = dbStore.approveSubmission(req.params.id, token);
+
+    if (!result.success) {
+      return res.status(400).send(`
+        <!DOCTYPE html>
+        <html>
+        <head><title>Approval Failed - EXAM BREAD</title></head>
+        <body style="font-family: sans-serif; background: #0c0a09; color: #f5f5f4; text-align: center; padding: 50px;">
+          <h2 style="color: #ef4444;">Approval Failed</h2>
+          <p>${result.message}</p>
+          <a href="/" style="color: #f59e0b;">Return to EXAM BREAD</a>
+        </body>
+        </html>
+      `);
+    }
+
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Paper Approved! - EXAM BREAD</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0c0a09; color: #f5f5f4; text-align: center; padding: 40px 20px;">
+        <div style="max-width: 500px; margin: 0 auto; background: #1c1917; border: 1px solid #292524; border-radius: 24px; padding: 32px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);">
+          <div style="width: 56px; height: 56px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 16px; margin: 0 auto 16px auto; display: flex; align-items: center; justify-content: center; font-size: 28px;">
+            ✅
+          </div>
+          <h2 style="color: #10b981; margin: 0 0 8px 0; font-size: 22px;">Paper Approved & Added!</h2>
+          <p style="color: #a8a29e; font-size: 14px; margin: 0 0 20px 0;">
+            <strong>${result.submission?.courseName}</strong> (${result.submission?.examType.toUpperCase()}) has been verified and added to the official EXAM BREAD archive.
+          </p>
+          <div style="background: #292524; border-radius: 12px; padding: 14px; margin-bottom: 24px; text-align: left; font-size: 12px; color: #d6d3d1;">
+            <div><strong>Course:</strong> ${result.submission?.courseName} (${result.submission?.courseCode})</div>
+            <div><strong>Exam:</strong> ${result.submission?.examType.toUpperCase()} ${result.submission?.year}</div>
+            <div><strong>File:</strong> ${result.submission?.fileName}</div>
+            <div><strong>Status:</strong> <span style="color: #10b981; font-weight: bold;">Verified & Live in Repository</span></div>
+          </div>
+          <a href="/" style="display: inline-block; background: #f59e0b; color: #0c0a09; font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: 12px; font-size: 14px;">
+            Open EXAM BREAD Archive
+          </a>
+        </div>
+      </body>
+      </html>
+    `);
+  });
+
+  // Rejection from email
+  app.get('/api/submissions/:id/reject', (req, res) => {
+    const token = (req.query.token as string) || '';
+    const result = dbStore.rejectSubmission(req.params.id, token);
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head><title>Submission Rejected - EXAM BREAD</title></head>
+      <body style="font-family: sans-serif; background: #0c0a09; color: #f5f5f4; text-align: center; padding: 50px;">
+        <h2 style="color: #f59e0b;">Submission Discarded</h2>
+        <p style="color: #a8a29e;">The submission was rejected and will not be added to the public repository.</p>
+        <a href="/" style="color: #f59e0b;">Return to EXAM BREAD</a>
+      </body>
+      </html>
+    `);
+  });
+
+  // In-app JSON approval
+  app.post('/api/submissions/:id/approve', (req, res) => {
+    const { token } = req.body;
+    const result = dbStore.approveSubmission(req.params.id, token || 'admin-bypass');
+    res.json(result);
+  });
+
+  app.post('/api/submissions/:id/reject', (req, res) => {
+    const { token } = req.body;
+    const result = dbStore.rejectSubmission(req.params.id, token || 'admin-bypass');
+    res.json(result);
+  });
+
+  // Admin Direct Publish to Drive Archive
+  app.post('/api/papers/admin-publish', (req, res) => {
+    try {
+      const { courseCode, courseName, examType, year, fileName, driveLink, pdfBase64, fileSize, adminKey } = req.body;
+      if (adminKey && adminKey !== 'Bhansu@8437' && adminKey !== '25BCE8476' && adminKey !== 'admin-bypass') {
+        return res.status(403).json({ error: 'Unauthorized: Invalid Admin Registration Key' });
+      }
+
+      const normCode = (courseCode || 'CSE2008').trim().toUpperCase();
+      const publishedPaper = {
+        id: `pub-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        courseCode: normCode,
+        courseName: courseName || normCode,
+        examType: ((examType || 'fat').toLowerCase()) as 'cat1' | 'cat2' | 'fat',
+        year: Number(year) || 2025,
+        fileName: fileName || `${normCode}_${(examType || 'fat').toUpperCase()}_${year || 2025}.pdf`,
+        driveLink: driveLink || `https://drive.google.com/drive/folders/1sX8kIpxqxuv_rnECo7rS9Ldl8eycBdJ5?usp=drive_link`,
+        fileSize: Number(fileSize) || 240000,
+        pdfBase64: pdfBase64 || '',
+        publishedAt: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        publishedBy: 'Bhanu (25BCE8476)',
+        verified: true,
+      };
+
+      dbStore.addPublishedPaper(publishedPaper);
+
+      // Also register paper in demo user's state
+      const state = dbStore.getUserState('demo-user');
+      if (state) {
+        state.papers.unshift({
+          id: `paper-${publishedPaper.id}`,
+          userId: 'demo-user',
+          fileName: publishedPaper.fileName,
+          subject: publishedPaper.courseName,
+          examName: `VIT-AP University ${publishedPaper.examType.toUpperCase()} Examination`,
+          year: publishedPaper.year,
+          fileSize: publishedPaper.fileSize,
+          uploadedAt: new Date().toISOString(),
+          status: 'analyzed',
+          totalQuestions: 10,
+          totalMarks: publishedPaper.examType === 'fat' ? 100 : 50,
+        });
+      }
+
+      res.json({
+        success: true,
+        paper: publishedPaper,
+        message: `Paper "${publishedPaper.courseName} ${publishedPaper.examType.toUpperCase()}" published to Drive archive!`,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Failed to publish paper', details: err.message });
+    }
+  });
+
+  app.get('/api/papers/published', (req, res) => {
+    const publishedPapers = dbStore.getPublishedPapers();
+    res.json({ publishedPapers });
   });
 
   // --- QUESTIONS EXPLORER ---

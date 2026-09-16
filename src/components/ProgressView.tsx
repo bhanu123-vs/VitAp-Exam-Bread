@@ -157,7 +157,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({
               {metrics.readinessSummary.strongCount} Topics
             </div>
             <p className="text-[11px] text-stone-400">
-              Memory Management, Process Sync, Disk Scheduling
+              Core derivations, recurring Part A proofs, boundary formulations
             </p>
           </div>
 
@@ -167,7 +167,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({
               {metrics.readinessSummary.needsWorkCount} Topics
             </div>
             <p className="text-[11px] text-stone-400">
-              Virtual Memory, UNIX Inode File Systems
+              Secondary applications, edge boundary problems, minor algorithms
             </p>
           </div>
 
@@ -177,7 +177,7 @@ export const ProgressView: React.FC<ProgressViewProps> = ({
               {metrics.readinessSummary.criticalCount} Topics
             </div>
             <p className="text-[11px] text-stone-400">
-              Deadlocks (Banker's Algorithm), Preemptive SJF
+              High-recurrence 10-mark derivations and multi-stage numerical problems
             </p>
           </div>
         </div>

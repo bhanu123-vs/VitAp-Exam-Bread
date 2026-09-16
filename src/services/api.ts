@@ -380,5 +380,73 @@ export const api = {
   async updateWeaknessStatus(topicName: string, status: 'Critical' | 'Needs Work' | 'Strong') {
     return this.updateManualWeakness(topicName, status);
   },
+
+  // Paper Submissions & Email to Bhanu
+  async submitPaper(payload: {
+    courseCode?: string;
+    courseName: string;
+    examType: string;
+    year: number;
+    fileName: string;
+    fileSize: number;
+    rawText?: string;
+    pdfBase64?: string;
+    uploaderEmail?: string;
+    uploaderNotes?: string;
+  }) {
+    const res = await fetch('/api/papers/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  },
+
+  async getSubmissions() {
+    const res = await fetch('/api/submissions');
+    return res.json();
+  },
+
+  async approveSubmission(id: string, token?: string) {
+    const res = await fetch(`/api/submissions/${id}/approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+    return res.json();
+  },
+
+  async rejectSubmission(id: string, token?: string) {
+    const res = await fetch(`/api/submissions/${id}/reject`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+    return res.json();
+  },
+
+  async adminPublishPaper(payload: {
+    courseCode: string;
+    courseName?: string;
+    examType: 'cat1' | 'cat2' | 'fat';
+    year: number;
+    fileName: string;
+    driveLink?: string;
+    pdfBase64?: string;
+    fileSize?: number;
+    adminKey?: string;
+  }) {
+    const res = await fetch('/api/papers/admin-publish', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  },
+
+  async getPublishedPapers() {
+    const res = await fetch('/api/papers/published');
+    return res.json();
+  },
 };
 

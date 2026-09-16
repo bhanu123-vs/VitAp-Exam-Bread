@@ -1,26 +1,33 @@
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
-  HelpCircle,
+  GraduationCap,
+  Calendar,
   Layers,
   Award,
   AlertTriangle,
   TrendingUp,
-  Calendar,
-  Flame,
-  ArrowRight,
   Clock,
   CheckCircle2,
   Sparkles,
-  Zap,
-  BarChart3,
+  ArrowRight,
   BookOpen,
-  Wheat,
+  LayoutDashboard,
+  Search,
+  Check,
+  FileText,
+  UploadCloud,
+  ChevronRight,
+  ExternalLink,
 } from 'lucide-react';
-import { User, PriorityItem, ExaminerInsight, StudyTask, Question } from '../types.js';
+import { User, PriorityItem, ExaminerInsight, StudyTask, Question, MockTestResult } from '../types.js';
+import { VIT_AP_COURSES } from '../data/vitApCourses.js';
+import { ALL_57_COURSES_SYLLABUS } from '../data/all57CoursesSyllabus.js';
+import { getLatestMockResult, getStoredMockResults } from '../utils/mockPyqQuestionEngine.js';
+import { VPATH_COURSES } from '../data/vpathDatabase.js';
 
 interface DashboardViewProps {
   user: User | null;
-  summaryCards: {
+  summaryCards?: {
     pyqsAnalyzed: number;
     questionsFound: number;
     topicsIdentified: number;
@@ -28,518 +35,567 @@ interface DashboardViewProps {
     preparationScore: number;
     studyStreak: number;
   };
-  whatToStudyNow: any;
-  topPriorities: PriorityItem[];
-  examinerInsights: ExaminerInsight[];
-  todayTasks: StudyTask[];
-  recentQuestions: Question[];
+  whatToStudyNow?: any;
+  topPriorities?: PriorityItem[];
+  examinerInsights?: ExaminerInsight[];
+  todayTasks?: StudyTask[];
+  recentQuestions?: Question[];
   onNavigate: (tab: string) => void;
-  onStartStudy: (topicName: string) => void;
-  onToggleTask: (taskId: string) => void;
-  onOpenDiagnostic: () => void;
+  onStartStudy?: (topicName: string) => void;
+  onToggleTask?: (taskId: string) => void;
+  onOpenDiagnostic?: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
   user,
   summaryCards,
-  whatToStudyNow,
-  topPriorities,
-  examinerInsights,
-  todayTasks,
-  recentQuestions,
   onNavigate,
-  onStartStudy,
-  onToggleTask,
-  onOpenDiagnostic,
 }) => {
+  // Course selector for analysis
+  const [selectedCourseCode, setSelectedCourseCode] = useState<string>('CSE1001');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedExamType, setSelectedExamType] = useState<'cat1' | 'cat2' | 'fat'>('cat1');
+
+  // Load mock test results from store
+  const [mockResult, setMockResult] = useState<MockTestResult | null>(null);
+  const [allMockResults, setAllMockResults] = useState<MockTestResult[]>([]);
+
+  useEffect(() => {
+    const latest = getLatestMockResult();
+    const all = getStoredMockResults();
+    setMockResult(latest);
+    setAllMockResults(all);
+  }, []);
+
+  // Filter courses for dropdown/search
+  const filteredCourses = useMemo(() => {
+    if (!searchQuery.trim()) return VIT_AP_COURSES;
+    const q = searchQuery.toLowerCase();
+    return VIT_AP_COURSES.filter(
+      (c) => c.code.toLowerCase().includes(q) || c.title.toLowerCase().includes(q)
+    );
+  }, [searchQuery]);
+
+  const activeCourse = useMemo(() => {
+    return (
+      VIT_AP_COURSES.find((c) => c.code === selectedCourseCode) ||
+      VIT_AP_COURSES[0]
+    );
+  }, [selectedCourseCode]);
+
+  // Syllabus breakdown for active course & exam type
+  // CAT-1: Modules 1 & 2
+  // CAT-2: Modules 3 & 4
+  // FAT: All modules (1 to 5)
+  const syllabusData = useMemo(() => {
+    const fullSyllabus = ALL_57_COURSES_SYLLABUS[selectedCourseCode] || [];
+    if (selectedExamType === 'cat1') {
+      return fullSyllabus.filter((m) => m.moduleNumber === 1 || m.moduleNumber === 2);
+    } else if (selectedExamType === 'cat2') {
+      return fullSyllabus.filter((m) => m.moduleNumber === 3 || m.moduleNumber === 4);
+    } else {
+      return fullSyllabus;
+    }
+  }, [selectedCourseCode, selectedExamType]);
+
+  // Derive weak and strong topics from mockResult or course syllabus defaults
+  const topicAnalysis = useMemo(() => {
+    if (mockResult) {
+      return {
+        weakHigh: mockResult.weakHighPriorityTopics || [],
+        weakLow: mockResult.weakLowPriorityTopics || [],
+        strongHigh: mockResult.strongHighPriorityTopics || [],
+        strongLow: mockResult.strongLowPriorityTopics || [],
+      };
+    }
+
+    // Default intelligent baseline from syllabus
+    const syllabus = ALL_57_COURSES_SYLLABUS[selectedCourseCode] || [];
+    const mod1Topics = syllabus[0]?.coreTopics || ['Fundamental Algorithms', 'Boundary Conditions'];
+    const mod2Topics = syllabus[1]?.coreTopics || ['Derivation Steps', 'Recurrence Solutions'];
+    const mod3Topics = syllabus[2]?.coreTopics || ['Dynamic State Modeling', 'Optimization Criteria'];
+
+    return {
+      weakHigh: [mod1Topics[0] || 'State Boundary Proofs', mod2Topics[0] || 'Mathematical Derivations'],
+      weakLow: [mod1Topics[2] || 'Terminology Definitions'],
+      strongHigh: [mod2Topics[1] || 'Standard Problem Formulation'],
+      strongLow: [mod3Topics[0] || 'Conceptual Overview'],
+    };
+  }, [mockResult, selectedCourseCode]);
+
+  // Drive link for active course
+  const activeVpath = useMemo(() => {
+    return VPATH_COURSES.find((v) => v.code === selectedCourseCode);
+  }, [selectedCourseCode]);
+
+  const targetDriveUrl = useMemo(() => {
+    if (!activeVpath) return 'https://drive.google.com/drive/folders/1sX8kIpxqxuv_rnECo7rS9Ldl8eycBdJ5?usp=drive_link';
+    if (selectedExamType === 'cat1') return activeVpath.cat1Url || activeVpath.fatUrl;
+    if (selectedExamType === 'cat2') return activeVpath.cat2Url || activeVpath.fatUrl;
+    return activeVpath.fatUrl;
+  }, [activeVpath, selectedExamType]);
+
   return (
-    <div id="dashboard-view" className="space-y-6 max-w-7xl mx-auto pb-12">
-      {/* Header Greeting & Subtitle */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div id="dashboard-view" className="space-y-8 max-w-7xl mx-auto pb-16">
+      {/* 1. HEADER WITH COURSE SELECTOR & GREETING */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-6 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-            <span>Good day, {user?.name || 'Student'}</span>
-            <span className="text-xl">👋</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold mb-2 border border-amber-500/20">
+            <GraduationCap className="w-3.5 h-3.5" />
+            <span>VIT-AP University Exam Analysis Dashboard</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900 dark:text-white">
+            Welcome, Guest Student 👋
           </h1>
-          <p className="text-sm text-stone-400 mt-1">
-            Here's what matters for your {user?.examName || 'Operating Systems'} exam.
+          <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
+            Analyzing mock exam evaluations, topic priorities, and syllabus breakdowns for <span className="font-semibold text-stone-900 dark:text-stone-200">{activeCourse.title} ({activeCourse.code})</span>.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <button
-            id="dash-btn-run-diagnostic"
-            onClick={onOpenDiagnostic}
-            className="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-750 text-amber-300 font-semibold text-xs border border-amber-500/30 flex items-center gap-1.5 transition-all shadow-sm"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Retake Diagnostic Drill</span>
-          </button>
-          <button
-            id="dash-btn-upload-pyq"
-            onClick={() => onNavigate('upload')}
-            className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs shadow-md transition-all flex items-center gap-1.5"
-          >
-            <span>+ Add PYQ Paper</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 6 Summary Metric Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">
-        {/* PYQs Analyzed */}
-        <div
-          id="metric-pyqs-analyzed"
-          onClick={() => onNavigate('upload')}
-          className="rounded-2xl bg-stone-900 border border-stone-800 p-4 hover:border-amber-500/40 cursor-pointer transition-all"
-        >
-          <div className="flex items-center justify-between text-stone-400 text-xs mb-2">
-            <span>PYQs Analyzed</span>
-            <BookOpen className="w-4 h-4 text-amber-400" />
-          </div>
-          <div className="text-2xl font-extrabold text-white">
-            {summaryCards.pyqsAnalyzed}
-          </div>
-          <div className="text-[11px] text-stone-400 mt-1">
-            2021 – 2025 Papers
-          </div>
-        </div>
-
-        {/* Questions Found */}
-        <div
-          id="metric-questions-found"
-          onClick={() => onNavigate('questions')}
-          className="rounded-2xl bg-stone-900 border border-stone-800 p-4 hover:border-amber-500/40 cursor-pointer transition-all"
-        >
-          <div className="flex items-center justify-between text-stone-400 text-xs mb-2">
-            <span>Questions</span>
-            <HelpCircle className="w-4 h-4 text-blue-400" />
-          </div>
-          <div className="text-2xl font-extrabold text-white">
-            {summaryCards.questionsFound}
-          </div>
-          <div className="text-[11px] text-stone-400 mt-1">
-            Fully classified
-          </div>
-        </div>
-
-        {/* Topics Identified */}
-        <div
-          id="metric-topics-identified"
-          onClick={() => onNavigate('topics')}
-          className="rounded-2xl bg-stone-900 border border-stone-800 p-4 hover:border-amber-500/40 cursor-pointer transition-all"
-        >
-          <div className="flex items-center justify-between text-stone-400 text-xs mb-2">
-            <span>Topics Identified</span>
-            <Layers className="w-4 h-4 text-emerald-400" />
-          </div>
-          <div className="text-2xl font-extrabold text-white">
-            {summaryCards.topicsIdentified}
-          </div>
-          <div className="text-[11px] text-stone-400 mt-1">
-            Across 5 exam units
-          </div>
-        </div>
-
-        {/* High Priority Topics */}
-        <div
-          id="metric-high-priority"
-          onClick={() => onNavigate('priority-matrix')}
-          className="rounded-2xl bg-stone-900 border border-stone-800 p-4 hover:border-red-500/40 cursor-pointer transition-all"
-        >
-          <div className="flex items-center justify-between text-stone-400 text-xs mb-2">
-            <span>High Priority</span>
-            <AlertTriangle className="w-4 h-4 text-red-400" />
-          </div>
-          <div className="text-2xl font-extrabold text-red-400">
-            {summaryCards.highPriorityTopics}
-          </div>
-          <div className="text-[11px] text-stone-400 mt-1">
-            Study First quadrant
-          </div>
-        </div>
-
-        {/* Exam Readiness Score */}
-        <div
-          id="metric-readiness-score"
-          onClick={() => onNavigate('progress')}
-          className="rounded-2xl bg-stone-900 border border-stone-800 p-4 hover:border-amber-500/40 cursor-pointer transition-all"
-        >
-          <div className="flex items-center justify-between text-stone-400 text-xs mb-2">
-            <span>Exam Readiness</span>
-            <TrendingUp className="w-4 h-4 text-amber-400" />
-          </div>
-          <div className="text-2xl font-extrabold text-amber-400">
-            {summaryCards.preparationScore}%
-          </div>
-          <div className="text-[11px] text-stone-400 mt-1">
-            +17% from baseline
-          </div>
-        </div>
-
-        {/* Study Streak */}
-        <div
-          id="metric-study-streak"
-          onClick={() => onNavigate('progress')}
-          className="rounded-2xl bg-stone-900 border border-stone-800 p-4 hover:border-orange-500/40 cursor-pointer transition-all"
-        >
-          <div className="flex items-center justify-between text-stone-400 text-xs mb-2">
-            <span>Study Streak</span>
-            <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
-          </div>
-          <div className="text-2xl font-extrabold text-orange-400">
-            {summaryCards.studyStreak} Days
-          </div>
-          <div className="text-[11px] text-stone-400 mt-1">
-            Top 5% consistency
-          </div>
-        </div>
-      </div>
-
-      {/* HERO RECOMMENDATION CARD: "WHAT SHOULD I STUDY NOW?" */}
-      {whatToStudyNow && (
-        <div
-          id="hero-what-to-study-now"
-          className="rounded-3xl bg-gradient-to-r from-stone-900 via-stone-900 to-amber-950/40 border border-amber-500/40 p-6 sm:p-7 relative overflow-hidden shadow-xl"
-        >
-          {/* Subtle decorative glow */}
-          <div className="absolute right-0 top-0 w-80 h-full bg-gradient-to-l from-amber-500/10 to-transparent pointer-events-none" />
-
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-            <div className="space-y-3 max-w-3xl">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-500 text-stone-950">
-                  🔥 WHAT SHOULD I STUDY NOW?
-                </span>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-red-500/20 text-red-300 border border-red-500/30">
-                  QUADRANT: {whatToStudyNow.quadrant}
-                </span>
-                <span className="text-xs font-mono text-stone-400">
-                  Calculated Priority: <strong className="text-white">{whatToStudyNow.priorityScore}/100</strong>
-                </span>
-              </div>
-
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                  {whatToStudyNow.topic}
-                </h2>
-                <p className="text-sm sm:text-base text-stone-300 mt-1 leading-relaxed">
-                  {whatToStudyNow.reason}
-                </p>
-              </div>
-
-              {/* Evidence details list */}
-              <div className="flex flex-wrap items-center gap-3 pt-1">
-                <span className="text-xs text-stone-300 bg-stone-800/80 px-3 py-1 rounded-lg border border-stone-700 flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Est. Time: {whatToStudyNow.estimatedTime}</span>
-                </span>
-                <span className="text-xs text-stone-300 bg-stone-800/80 px-3 py-1 rounded-lg border border-stone-700">
-                  Historical Marks: <strong className="text-amber-300">{whatToStudyNow.historicalMarks} M</strong>
-                </span>
-                <span className="text-xs text-stone-300 bg-stone-800/80 px-3 py-1 rounded-lg border border-stone-700">
-                  PYQ Frequency: <strong className="text-amber-300">{whatToStudyNow.frequencyCount} questions</strong>
-                </span>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
-              <button
-                id="btn-start-studying-hero"
-                onClick={() => onStartStudy(whatToStudyNow.topic)}
-                className="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 transform active:scale-95"
-              >
-                <span>Start Studying This Now</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                id="btn-view-priority-matrix"
-                onClick={() => onNavigate('priority-matrix')}
-                className="px-4 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white font-medium text-xs border border-stone-750 transition-all text-center"
-              >
-                View Full 2D Priority Matrix
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Two-Column Layout: Priority Ranking & Today's Study Plan */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left 7 cols: Top Priority Topics List */}
-        <div className="lg:col-span-7 rounded-3xl bg-stone-900 border border-stone-800 p-5 sm:p-6 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-stone-800">
-            <div>
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <span>Top Exam Priorities</span>
-                <span className="text-xs font-normal text-stone-400">
-                  (Deterministic Formula)
-                </span>
-              </h3>
-              <p className="text-xs text-stone-400 mt-0.5">
-                Formula: Frequency (25%) + Weakness (35%) + Marks (15%) + Recency (15%) + Recurrence (10%)
-              </p>
-            </div>
-            <button
-              onClick={() => onNavigate('priority-matrix')}
-              className="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1"
+        {/* Course Dropdown Selector */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="relative">
+            <select
+              value={selectedCourseCode}
+              onChange={(e) => setSelectedCourseCode(e.target.value)}
+              className="w-full sm:w-64 appearance-none px-4 py-2.5 pr-8 rounded-xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs font-semibold text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
-              <span>Explore Matrix</span>
+              {VIT_AP_COURSES.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.code} - {c.title}
+                </option>
+              ))}
+            </select>
+            <ChevronRight className="w-4 h-4 text-stone-400 absolute right-3 top-3 pointer-events-none rotate-90" />
+          </div>
+
+          <button
+            onClick={() => onNavigate('mock-test')}
+            className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95"
+          >
+            <GraduationCap className="w-4 h-4" />
+            <span>New Mock Test</span>
+          </button>
+        </div>
+      </div>
+
+      {/* 2. LATEST MOCK EXAM RESULTS EVALUATION SECTION */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 space-y-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                Mock Exam Performance Evaluation
+              </span>
+              {mockResult && (
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20">
+                  Latest Evaluated Test
+                </span>
+              )}
+            </div>
+            <h2 className="text-xl font-bold text-stone-900 dark:text-white mt-1">
+              {mockResult ? mockResult.title : `No Mock Test Completed Yet for ${activeCourse.code}`}
+            </h2>
+            <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+              {mockResult
+                ? `Completed on ${mockResult.date} • Results compiled directly from repeated PYQ questions.`
+                : 'Take a simulated PYP mock test to evaluate your accuracy and reveal your exact weak and strong topics.'}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => onNavigate('mock-test')}
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs shadow-sm transition-all flex items-center gap-1.5"
+            >
+              <span>{mockResult ? 'Retake / Take Another Test' : 'Launch Mock Test'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
-
-          <div className="space-y-3">
-            {topPriorities.slice(0, 5).map((item, idx) => (
-              <div
-                key={item.topic}
-                className="rounded-2xl bg-stone-950/80 border border-stone-800/80 p-3.5 hover:border-stone-700 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-stone-900 border border-stone-800 flex items-center justify-center text-xs font-mono font-bold text-amber-400 shrink-0 mt-0.5">
-                    #{idx + 1}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-stone-100 text-sm">
-                        {item.topic}
-                      </h4>
-                      <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          item.quadrant === 'STUDY FIRST'
-                            ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                            : item.quadrant === 'MAINTAIN'
-                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                            : 'bg-stone-800 text-stone-400 border border-stone-700'
-                        }`}
-                      >
-                        {item.quadrant}
-                      </span>
-                    </div>
-                    <div className="text-xs text-stone-400 mt-1 flex flex-wrap items-center gap-3">
-                      <span>Appeared: <strong className="text-stone-300">{item.yearsAppeared}</strong></span>
-                      <span>Marks: <strong className="text-stone-300">{item.historicalMarks}M</strong></span>
-                      <span>
-                        Your Accuracy:{' '}
-                        <strong
-                          className={
-                            item.studentAccuracy < 50
-                              ? 'text-red-400'
-                              : item.studentAccuracy < 75
-                              ? 'text-amber-400'
-                              : 'text-emerald-400'
-                          }
-                        >
-                          {item.studentAccuracy}%
-                        </strong>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
-                  <div className="text-right">
-                    <div className="text-base font-extrabold text-amber-400">
-                      {item.priorityScore}
-                    </div>
-                    <div className="text-[10px] text-stone-400 uppercase">
-                      Priority
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => onStartStudy(item.topic)}
-                    className="px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-amber-500 hover:text-stone-950 text-stone-200 text-xs font-semibold border border-stone-700 transition-all"
-                  >
-                    Practice
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
-        {/* Right 5 cols: Today's 7-Day Plan Tasks */}
-        <div className="lg:col-span-5 rounded-3xl bg-stone-900 border border-stone-800 p-5 sm:p-6 space-y-4 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between pb-3 border-b border-stone-800 mb-4">
-              <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-amber-400" />
-                  <span>Today's Study Plan</span>
-                </h3>
-                <p className="text-xs text-stone-400 mt-0.5">
-                  Day 1: Deadlocks Mastery (2 Hours Target)
-                </p>
+        {mockResult ? (
+          <div className="space-y-6">
+            {/* Metric score blocks */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800/80 text-center">
+                <div className="text-xs text-stone-500 dark:text-stone-400 mb-1">Score Obtained</div>
+                <div className="text-2xl font-extrabold text-stone-900 dark:text-white">
+                  {mockResult.score} / {mockResult.maxScore}
+                </div>
               </div>
-              <button
-                onClick={() => onNavigate('study-plan')}
-                className="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1"
-              >
-                <span>Full 7 Days</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+
+              <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800/80 text-center">
+                <div className="text-xs text-stone-500 dark:text-stone-400 mb-1">Accuracy</div>
+                <div className={`text-2xl font-extrabold ${
+                  mockResult.accuracy >= 70 ? 'text-emerald-500' : mockResult.accuracy >= 50 ? 'text-amber-500' : 'text-rose-500'
+                }`}>
+                  {mockResult.accuracy}%
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800/80 text-center">
+                <div className="text-xs text-stone-500 dark:text-stone-400 mb-1">Correct Questions</div>
+                <div className="text-2xl font-extrabold text-stone-900 dark:text-white">
+                  {mockResult.correctCount} / {mockResult.totalQuestions}
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800/80 text-center">
+                <div className="text-xs text-stone-500 dark:text-stone-400 mb-1">Estimated Grade</div>
+                <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">
+                  {mockResult.accuracy >= 85 ? 'S Grade' : mockResult.accuracy >= 70 ? 'A Grade' : mockResult.accuracy >= 55 ? 'B Grade' : 'Pass / C'}
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-2.5">
-              {todayTasks.slice(0, 4).map((task) => (
-                <div
-                  key={task.id}
-                  onClick={() => onToggleTask(task.id)}
-                  className={`p-3 rounded-2xl border text-xs cursor-pointer transition-all flex items-center justify-between gap-3 ${
-                    task.completed
-                      ? 'bg-emerald-950/20 border-emerald-500/30 text-stone-400'
-                      : 'bg-stone-950/80 border-stone-800 hover:border-stone-700 text-stone-200'
+            {/* Historical evaluation quote */}
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-900 dark:text-amber-200 font-medium">
+              💡 {mockResult.historicalComparison}
+            </div>
+          </div>
+        ) : (
+          <div className="p-8 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-dashed border-stone-300 dark:border-stone-800 text-center space-y-3">
+            <GraduationCap className="w-10 h-10 text-amber-500 mx-auto opacity-70" />
+            <h3 className="text-base font-bold text-stone-900 dark:text-white">
+              Ready to evaluate your exam readiness?
+            </h3>
+            <p className="text-xs text-stone-500 max-w-md mx-auto leading-relaxed">
+              Our mock test engine samples repeated questions asked across 5 years of {activeCourse.title} papers. Complete a 10-question test to populate this dashboard with tailored insights.
+            </p>
+            <button
+              onClick={() => onNavigate('mock-test')}
+              className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs shadow-md transition-all inline-flex items-center gap-2"
+            >
+              <span>Take Test for {activeCourse.code}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* 3. 4-QUADRANT WEAK & STRONG TOPIC PRIORITY ANALYSIS */}
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 className="text-xl font-bold text-stone-900 dark:text-white">
+              Topic Priority Matrix (Weak vs. Strong Topics)
+            </h2>
+            <p className="text-xs text-stone-500 dark:text-stone-400">
+              Correlating diagnostic accuracy with 5-year PYQ repetition frequency for targeted preparation.
+            </p>
+          </div>
+
+          <button
+            onClick={() => onNavigate('study-plan')}
+            className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1"
+          >
+            <span>Open 7-Day Roadmap for these topics</span>
+            <ArrowRight className="w-3 h-3" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* 1. Weak Topics - HIGH PRIORITY (Urgent!) */}
+          <div className="p-5 rounded-2xl bg-rose-500/10 border border-rose-500/30 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
+                <AlertTriangle className="w-4 h-4" />
+                <span>Weak Topics • High Priority (Urgent Attention)</span>
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded bg-rose-500/20 text-rose-700 dark:text-rose-300 font-bold">
+                {topicAnalysis.weakHigh.length} Topics
+              </span>
+            </div>
+            <p className="text-xs text-rose-700 dark:text-rose-300/90 leading-relaxed">
+              These topics have lower accuracy (&lt;60%) AND high recurrence in past papers. Immediate revision needed before exams!
+            </p>
+            <div className="space-y-2 pt-1">
+              {topicAnalysis.weakHigh.length > 0 ? (
+                topicAnalysis.weakHigh.map((topic, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-xl bg-white dark:bg-stone-900 border border-rose-200 dark:border-rose-900/40 flex items-center justify-between text-xs"
+                  >
+                    <div>
+                      <div className="font-semibold text-stone-900 dark:text-stone-100">{topic}</div>
+                      <div className="text-[10px] text-rose-500 mt-0.5">Appears in 80% of university question papers</div>
+                    </div>
+                    <button
+                      onClick={() => onNavigate('study-plan')}
+                      className="px-2.5 py-1 rounded-lg bg-rose-500 text-white font-bold text-[10px] hover:bg-rose-600 transition-colors shrink-0"
+                    >
+                      7-Day Roadmap
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-xs text-stone-500 italic p-2">
+                  No high-priority weak topics detected.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 2. Weak Topics - LOW PRIORITY (Secondary Focus) */}
+          <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
+                <Clock className="w-4 h-4" />
+                <span>Weak Topics • Low Priority</span>
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">
+                {topicAnalysis.weakLow.length} Topics
+              </span>
+            </div>
+            <p className="text-xs text-amber-700 dark:text-amber-300/90 leading-relaxed">
+              Lower test accuracy, but these concepts carry minor mark weightage (&lt;5 marks). Revise after mastering high-priority units.
+            </p>
+            <div className="space-y-2 pt-1">
+              {topicAnalysis.weakLow.length > 0 ? (
+                topicAnalysis.weakLow.map((topic, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-xl bg-white dark:bg-stone-900 border border-amber-200 dark:border-amber-900/40 flex items-center justify-between text-xs"
+                  >
+                    <div>
+                      <div className="font-semibold text-stone-900 dark:text-stone-100">{topic}</div>
+                      <div className="text-[10px] text-amber-600 dark:text-amber-400 mt-0.5">Low Exam Frequency (&lt;5 Marks)</div>
+                    </div>
+                    <span className="text-[10px] font-semibold text-stone-400">Revise Later</span>
+                  </div>
+                ))
+              ) : (
+                <div className="text-xs text-stone-500 italic p-2">
+                  No low-priority weak topics identified.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 3. Strong Topics - HIGH PRIORITY (Core Exam Pillars) */}
+          <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Strong Topics • High Priority (Guaranteed Marks)</span>
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-bold">
+                {topicAnalysis.strongHigh.length} Topics
+              </span>
+            </div>
+            <p className="text-xs text-emerald-700 dark:text-emerald-300/90 leading-relaxed">
+              High accuracy (≥60%) AND repeatedly asked in university papers. Maintain this strength to lock in top grades!
+            </p>
+            <div className="space-y-2 pt-1">
+              {topicAnalysis.strongHigh.length > 0 ? (
+                topicAnalysis.strongHigh.map((topic, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-xl bg-white dark:bg-stone-900 border border-emerald-200 dark:border-emerald-900/40 flex items-center justify-between text-xs"
+                  >
+                    <div>
+                      <div className="font-semibold text-stone-900 dark:text-stone-100">{topic}</div>
+                      <div className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5">Mastered Core Exam Pillar</div>
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Locked In ✅</span>
+                  </div>
+                ))
+              ) : (
+                <div className="text-xs text-stone-500 italic p-2">
+                  Complete more mock test questions to establish strong topics.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 4. Strong Topics - LOW PRIORITY (Mastered Minor Concepts) */}
+          <div className="p-5 rounded-2xl bg-blue-500/10 border border-blue-500/30 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
+                <Award className="w-4 h-4" />
+                <span>Strong Topics • Low Priority</span>
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded bg-blue-500/20 text-blue-700 dark:text-blue-300 font-bold">
+                {topicAnalysis.strongLow.length} Topics
+              </span>
+            </div>
+            <p className="text-xs text-blue-700 dark:text-blue-300/90 leading-relaxed">
+              Good accuracy, but appears rarely or carries minimal weightage in exams. No further action needed.
+            </p>
+            <div className="space-y-2 pt-1">
+              {topicAnalysis.strongLow.length > 0 ? (
+                topicAnalysis.strongLow.map((topic, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-xl bg-white dark:bg-stone-900 border border-blue-200 dark:border-blue-900/40 flex items-center justify-between text-xs"
+                  >
+                    <div>
+                      <div className="font-semibold text-stone-900 dark:text-stone-100">{topic}</div>
+                      <div className="text-[10px] text-blue-500 mt-0.5">Low Exam Frequency • Solid Foundation</div>
+                    </div>
+                    <span className="text-[10px] font-semibold text-stone-400">Stable</span>
+                  </div>
+                ))
+              ) : (
+                <div className="text-xs text-stone-500 italic p-2">
+                  No minor strong topics recorded.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. SEPARATE ANALYSIS OF CAT-1, CAT-2, AND FAT */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 space-y-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold mb-2 border border-blue-500/20">
+              <Layers className="w-3.5 h-3.5" />
+              <span>University Examination Structure</span>
+            </div>
+            <h2 className="text-xl font-bold text-stone-900 dark:text-white">
+              Separate Analysis: CAT-1, CAT-2 & FAT for {activeCourse.title}
+            </h2>
+            <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+              Select an examination segment below to view module syllabus boundaries, weightages, and repeated question trends.
+            </p>
+          </div>
+
+          {/* Exam Segment Toggle Buttons */}
+          <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-2xl bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+            {[
+              { id: 'cat1', label: 'CAT-1', badge: 'Mod 1 & 2' },
+              { id: 'cat2', label: 'CAT-2', badge: 'Mod 3 & 4' },
+              { id: 'fat', label: 'FAT', badge: 'All Modules' },
+            ].map((tab) => {
+              const isSel = selectedExamType === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setSelectedExamType(tab.id as any)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    isSel
+                      ? 'bg-amber-500 text-stone-950 shadow-sm'
+                      : 'text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white'
                   }`}
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div
-                      className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${
-                        task.completed
-                          ? 'bg-emerald-500 border-emerald-400 text-stone-950'
-                          : 'border-stone-700 bg-stone-900'
-                      }`}
-                    >
-                      {task.completed && <CheckCircle2 className="w-3.5 h-3.5" />}
-                    </div>
-                    <div className="min-w-0">
-                      <div
-                        className={`font-semibold truncate ${
-                          task.completed ? 'line-through text-stone-400' : 'text-stone-100'
-                        }`}
-                      >
-                        {task.title}
-                      </div>
-                      <div className="text-[11px] text-stone-400 flex items-center gap-2 mt-0.5">
-                        <span className="text-amber-400">{task.type}</span>
-                        <span>&bull;</span>
-                        <span>{task.durationMinutes} mins</span>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800 shrink-0">
-                    Score: {task.priorityScore}
+                  <span>{tab.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded ${
+                    isSel ? 'bg-stone-950/20 text-stone-950' : 'bg-stone-200 dark:bg-stone-700 text-stone-500 dark:text-stone-400'
+                  }`}>
+                    {tab.badge}
                   </span>
-                </div>
-              ))}
-            </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Exam Breakdown Banner */}
+        <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="space-y-1">
+            <span className="font-bold text-stone-900 dark:text-stone-100">
+              {selectedExamType === 'cat1' && 'Continuous Assessment Test 1 (CAT-1) • Average Weightage: 50 Marks'}
+              {selectedExamType === 'cat2' && 'Continuous Assessment Test 2 (CAT-2) • Average Weightage: 50 Marks'}
+              {selectedExamType === 'fat' && 'Final Assessment Test (FAT) • University Comprehensive: 100 Marks'}
+            </span>
+            <p className="text-stone-500 dark:text-stone-400">
+              {selectedExamType === 'cat1' && 'Covers Module 1 and Module 2 exclusively. Focus on foundation proofs, analytical definitions, and Part A numerical questions.'}
+              {selectedExamType === 'cat2' && 'Covers Module 3 and Module 4 exclusively. Emphasizes advanced design trade-offs, synthesis problems, and algorithmic derivations.'}
+              {selectedExamType === 'fat' && 'Covers All Modules (1, 2, 3, 4, 5) comprehensively across Part A (short answers) and Part B (long 10-12 mark design questions).'}
+            </p>
           </div>
 
-          <div className="pt-4 border-t border-stone-800/80 mt-2">
+          {targetDriveUrl && (
+            <a
+              href={targetDriveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-2 rounded-xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 hover:border-amber-500 text-stone-800 dark:text-stone-200 font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-amber-500" />
+              <span>Open Verified Drive PYQs</span>
+            </a>
+          )}
+        </div>
+
+        {/* Module-by-Module Breakdown */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {syllabusData.map((mod) => (
+            <div
+              key={mod.moduleNumber}
+              className="p-5 rounded-2xl bg-stone-50 dark:bg-stone-950 border border-stone-200 dark:border-stone-800 space-y-3"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-lg bg-amber-500 text-stone-950 font-mono font-bold text-xs">
+                    Module {mod.moduleNumber}
+                  </span>
+                  <span className="font-bold text-sm text-stone-900 dark:text-white">
+                    {mod.name}
+                  </span>
+                </div>
+                <span className="text-xs font-bold text-amber-600 dark:text-amber-400">
+                  {selectedExamType === 'cat1'
+                    ? `${mod.cat1Weightage || 25}% of CAT-1`
+                    : selectedExamType === 'cat2'
+                    ? `${mod.cat2Weightage || 25}% of CAT-2`
+                    : `${mod.fatWeightage}% of FAT`}
+                </span>
+              </div>
+
+              <div className="space-y-1.5 pt-1">
+                <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider block">
+                  Core Topics Tested in PYPs:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {mod.coreTopics.map((topic, tIdx) => (
+                    <span
+                      key={tIdx}
+                      className="px-2.5 py-1 rounded-lg bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-[11px] text-stone-700 dark:text-stone-300 font-medium"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Fast Action CTAs */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-stone-200 dark:border-stone-800">
+          <div className="text-xs text-stone-500 dark:text-stone-400">
+            Exam tailored for <span className="font-semibold text-stone-900 dark:text-stone-200">{activeCourse.title}</span> • {selectedExamType.toUpperCase()}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => onNavigate('mock-test')}
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs shadow-sm transition-all flex items-center gap-1.5"
+            >
+              <GraduationCap className="w-3.5 h-3.5" />
+              <span>Simulate {selectedExamType.toUpperCase()} Test</span>
+            </button>
             <button
               onClick={() => onNavigate('study-plan')}
-              className="w-full py-2.5 rounded-xl bg-stone-800 hover:bg-stone-750 text-stone-200 text-xs font-semibold border border-stone-700 transition-all flex items-center justify-center gap-2"
+              className="px-4 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-750 text-stone-800 dark:text-stone-200 font-semibold text-xs border border-stone-200 dark:border-stone-700 transition-all flex items-center gap-1.5"
             >
-              <span>Customize Study Hours & Schedule</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <Calendar className="w-3.5 h-3.5 text-amber-500" />
+              <span>7-Day Roadmap</span>
+            </button>
+            <button
+              onClick={() => onNavigate('upload')}
+              className="px-4 py-2 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-750 text-stone-800 dark:text-stone-200 font-semibold text-xs border border-stone-200 dark:border-stone-700 transition-all flex items-center gap-1.5"
+            >
+              <UploadCloud className="w-3.5 h-3.5 text-blue-500" />
+              <span>Upload New Paper</span>
             </button>
           </div>
-        </div>
-      </div>
-
-      {/* Examiner Insights & Perennial Pillars */}
-      <div className="rounded-3xl bg-stone-900 border border-stone-800 p-5 sm:p-6 space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-stone-800">
-          <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Award className="w-4 h-4 text-amber-400" />
-              <span>Examiner Pattern Insights</span>
-            </h3>
-            <p className="text-xs text-stone-400 mt-0.5">
-              Verified behavioral anomalies derived across all 5 evaluated exam papers
-            </p>
-          </div>
-          <button
-            onClick={() => onNavigate('examiner-insights')}
-            className="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1"
-          >
-            <span>View All Insights</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-          {examinerInsights.slice(0, 4).map((ins) => (
-            <div
-              key={ins.id}
-              className="rounded-2xl bg-stone-950/80 border border-stone-800 p-4 flex flex-col justify-between hover:border-amber-500/30 transition-all"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
-                    {ins.category}
-                  </span>
-                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                    [{ins.evidenceType.toUpperCase()}]
-                  </span>
-                </div>
-                <h4 className="font-bold text-stone-100 text-sm mb-1">
-                  {ins.title}
-                </h4>
-                <p className="text-xs text-stone-400 leading-relaxed mb-3">
-                  {ins.observation}
-                </p>
-              </div>
-              <div className="pt-2 border-t border-stone-800/80 text-[11px] text-stone-400 flex items-center justify-between">
-                <span>{ins.statBadge}</span>
-                <span className="text-amber-400 font-semibold">{ins.impact} Impact</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recent Questions Preview */}
-      <div className="rounded-3xl bg-stone-900 border border-stone-800 p-5 sm:p-6 space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-stone-800">
-          <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-blue-400" />
-              <span>Extracted PYQ Questions</span>
-            </h3>
-            <p className="text-xs text-stone-400 mt-0.5">
-              Targeted sample of 143 questions parsed from 2021-2025 papers
-            </p>
-          </div>
-          <button
-            onClick={() => onNavigate('questions')}
-            className="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1"
-          >
-            <span>Open Question Explorer</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="divide-y divide-stone-800">
-          {recentQuestions.slice(0, 4).map((q) => (
-            <div key={q.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="space-y-1 max-w-3xl">
-                <div className="flex flex-wrap items-center gap-2 text-xs">
-                  <span className="font-mono font-bold text-amber-400 bg-stone-950 px-2 py-0.5 rounded border border-stone-800">
-                    {q.year} &bull; {q.questionNumber}
-                  </span>
-                  <span className="font-semibold text-stone-300">{q.topic}</span>
-                  <span className="text-stone-400">&bull;</span>
-                  <span className="text-stone-400">{q.subtopic}</span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    ACTUAL PYQ
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm text-stone-200 leading-relaxed">
-                  {q.questionText}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
-                <span className="text-xs font-bold text-amber-300 bg-stone-950 px-2.5 py-1 rounded-lg border border-stone-800">
-                  {q.marks} Marks
-                </span>
-                <span className="text-xs text-stone-400 px-2 py-1 rounded bg-stone-800/80">
-                  {q.difficulty}
-                </span>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </div>

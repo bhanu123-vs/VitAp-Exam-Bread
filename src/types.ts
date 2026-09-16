@@ -64,6 +64,7 @@ export interface AvailablePyqPaper {
 export type NavTab =
   | 'landing'
   | 'dashboard'
+  | 'practice'
   | 'upload'
   | 'questions'
   | 'topics'
@@ -72,7 +73,6 @@ export type NavTab =
   | 'weakness'
   | 'priority-matrix'
   | 'study-plan'
-  | 'practice'
   | 'mock-test'
   | 'progress'
   | 'settings';
@@ -276,6 +276,9 @@ export interface MockTestQuestion extends PracticeQuestion {
 export interface MockTestResult {
   id: string;
   title: string;
+  courseCode?: string;
+  courseName?: string;
+  examType?: 'cat1' | 'cat2' | 'fat';
   date: string;
   totalQuestions: number;
   attempted: number;
@@ -289,7 +292,12 @@ export interface MockTestResult {
     total: number;
     correct: number;
     accuracy: number;
+    priorityLevel?: 'high' | 'low';
   }[];
+  weakHighPriorityTopics?: string[];
+  weakLowPriorityTopics?: string[];
+  strongHighPriorityTopics?: string[];
+  strongLowPriorityTopics?: string[];
   weakConceptsIdentified: string[];
   historicalComparison: string;
   recommendedRevision: string[];

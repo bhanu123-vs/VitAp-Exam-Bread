@@ -9,16 +9,20 @@ import {
   CheckCircle2,
   FileText,
   Sparkles,
-  BarChart3,
+  LayoutDashboard,
+  Calendar,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.js';
 import { AvailablePypsLibrary } from './AvailablePypsLibrary.js';
 import { AvailablePyqPaper } from '../types.js';
 import { VitApLogo } from './VitApLogo.js';
 import { ExamBreadLogo } from './ExamBreadLogo.js';
+import { FooterCaution } from './FooterCaution.js';
 
 interface LandingPageProps {
-  onGetStarted: () => void;
+  onOpenDashboard: () => void;
+  onOpenRoadmap: () => void;
+  onGetStarted?: () => void;
   onUploadPyps: () => void;
   onTryDemo?: () => void;
   onAnalyzePaper?: (paper: AvailablePyqPaper) => void;
@@ -32,6 +36,8 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
+  onOpenDashboard,
+  onOpenRoadmap,
   onGetStarted,
   onUploadPyps,
   onAnalyzePaper,
@@ -40,6 +46,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const { theme, toggleTheme } = useTheme();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
+
+  const handleDashboardClick = () => {
+    if (onOpenDashboard) onOpenDashboard();
+    else if (onGetStarted) onGetStarted();
+  };
+
+  const handleRoadmapClick = () => {
+    if (onOpenRoadmap) onOpenRoadmap();
+    else if (onGetStarted) onGetStarted();
+  };
   const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,16 +93,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   return (
     <div
       id="landing-page"
-      className="min-h-screen bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 selection:bg-amber-500 selection:text-stone-950 transition-colors duration-200"
+      className="min-h-screen bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 selection:bg-amber-500 selection:text-stone-950 transition-colors duration-200 pb-20 md:pb-8"
     >
       {/* Top Navbar */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between border-b border-stone-200 dark:border-stone-800/80 sticky top-0 bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-md z-30">
+      <nav className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between border-b border-stone-200 dark:border-stone-800/80 sticky top-0 bg-stone-50/95 dark:bg-stone-950/95 backdrop-blur-md z-30">
         {/* Left: EXAM BREAD Brand & VIT-AP Logo */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <div
             id="landing-logo-btn"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center gap-2.5 cursor-pointer group"
+            className="flex items-center gap-2 sm:gap-2.5 cursor-pointer group shrink-0"
             title="EXAM BREAD Home"
           >
             <ExamBreadLogo size="sm" />
@@ -108,13 +124,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
         </div>
 
-        {/* Right Nav: Maintainer attribution in top right corner as requested + Theme + Actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Maintained by Bhanu Pill on the top right corner */}
+        {/* Right Nav: Maintainer attribution + Theme + Actions */}
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+          {/* Maintained by Bhanu Pill */}
           <a
             href="mailto:bhanu.25bce8476@vitapstudent.ac.in"
             title="Creator & Maintainer: D.Bhanu.V.N (25BCE8476)"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-200/70 hover:bg-amber-500/10 dark:bg-stone-800/80 dark:hover:bg-amber-500/15 border border-stone-300 dark:border-stone-700 text-xs text-stone-700 dark:text-stone-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium shrink-0"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-200/70 hover:bg-amber-500/10 dark:bg-stone-800/80 dark:hover:bg-amber-500/15 border border-stone-300 dark:border-stone-700 text-xs text-stone-700 dark:text-stone-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium shrink-0"
           >
             <span>Maintained by Bhanu</span>
             <span className="font-mono text-[11px] text-amber-600 dark:text-amber-400 font-semibold">(25BCE8476)</span>
@@ -135,76 +151,110 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             )}
           </button>
 
+          {/* Dashboard Action */}
+          <button
+            id="landing-btn-dashboard-top"
+            onClick={handleDashboardClick}
+            className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold text-stone-700 dark:text-stone-300 bg-white hover:bg-stone-100 dark:bg-stone-900 dark:hover:bg-stone-800 border border-stone-300 dark:border-stone-700 transition-colors active:scale-95"
+            title="Open Student Dashboard"
+          >
+            <LayoutDashboard className="w-3.5 h-3.5 text-amber-500" />
+            <span className="hidden xs:inline sm:inline">Dashboard</span>
+          </button>
+
+          {/* 7-Day Roadmap Action (Replaces Study Mode) */}
+          <button
+            id="landing-btn-roadmap-top"
+            onClick={handleRoadmapClick}
+            className="px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-stone-950 shadow-sm transition-all flex items-center gap-1.5 active:scale-95"
+            title="Open 7-Day Roadmap for CAT-1, CAT-2, and FAT"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>7-Day Roadmap</span>
+            <span className="hidden sm:inline text-[9px] font-bold px-1.5 py-0.5 bg-stone-950/15 text-stone-950 rounded">
+              CAT/FAT
+            </span>
+          </button>
+
           {/* Upload Paper Action */}
           <button
             id="landing-btn-upload-pyps-top"
             onClick={onUploadPyps}
-            className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-stone-700 dark:text-stone-300 bg-white hover:bg-stone-100 dark:bg-stone-900 dark:hover:bg-stone-800 border border-stone-300 dark:border-stone-700 transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-stone-700 dark:text-stone-300 bg-white hover:bg-stone-100 dark:bg-stone-900 dark:hover:bg-stone-800 border border-stone-300 dark:border-stone-700 transition-colors active:scale-95"
           >
             <UploadCloud className="w-3.5 h-3.5 text-amber-500" />
             <span>Upload Paper</span>
           </button>
-
-          {/* Study Workspace */}
-          <button
-            id="landing-btn-start-top"
-            onClick={onGetStarted}
-            className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-stone-950 shadow-sm transition-all flex items-center gap-1.5 active:scale-95"
-          >
-            <span>Study Mode</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
         </div>
       </nav>
 
-      {/* Clean & Pure Hero Section */}
-      <section className="pt-10 sm:pt-14 pb-10 px-4 sm:px-6 max-w-4xl mx-auto text-center">
+      {/* Clean & Pure Hero Section - Mobile-Optimized */}
+      <section className="pt-8 sm:pt-14 pb-8 sm:pb-10 px-4 sm:px-6 max-w-4xl mx-auto text-center">
         {/* Subtle University Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs font-medium text-stone-600 dark:text-stone-400 mb-5">
+        <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 rounded-full bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-xs font-medium text-stone-600 dark:text-stone-400 mb-4 sm:mb-5">
           <VitApLogo size="xs" showSubtitle={false} />
           <span>VIT-AP University</span>
           <span className="text-stone-300 dark:text-stone-700">•</span>
-          <span className="text-stone-800 dark:text-stone-200 font-semibold">Official Exam Question Papers</span>
+          <span className="text-stone-800 dark:text-stone-200 font-semibold">Official Exam Papers Hub</span>
         </div>
 
         {/* Headline */}
-        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-stone-900 dark:text-white mb-4 leading-tight">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-stone-900 dark:text-white mb-3 sm:mb-4 leading-tight">
           VIT-AP Previous Year Question Papers
         </h1>
 
         {/* Subtitle */}
-        <p className="text-base sm:text-lg text-stone-600 dark:text-stone-400 max-w-2xl mx-auto mb-8 leading-relaxed">
-          Download verified CAT-1, CAT-2, and FAT exam papers with semester notes across all branches and programs.
+        <p className="text-sm sm:text-base md:text-lg text-stone-600 dark:text-stone-400 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed">
+          Download verified CAT-1, CAT-2, and FAT exam papers with syllabus notes, answer keys, and tailored 7-day revision roadmaps across all branches.
         </p>
 
-        {/* Quick Hero Actions */}
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        {/* Quick Hero Actions - Full Width on Mobile, Row on Desktop */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 max-w-lg sm:max-w-none mx-auto">
+          {/* 7-Day Roadmap Primary Button (Replaces Study Mode) */}
+          <button
+            id="hero-btn-roadmap"
+            onClick={handleRoadmapClick}
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 active:scale-95"
+          >
+            <Calendar className="w-4 h-4" />
+            <span>7-Day Roadmap (CAT-1, CAT-2 & FAT)</span>
+          </button>
+
           <button
             onClick={scrollToCourses}
-            className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm shadow-md transition-all flex items-center gap-2 active:scale-95"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-sm border border-stone-300 dark:border-stone-700 transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
           >
-            <Download className="w-4 h-4" />
-            <span>Browse 57 Courses</span>
+            <Download className="w-4 h-4 text-amber-500" />
+            <span>Browse All Courses</span>
+          </button>
+
+          <button
+            id="hero-btn-dashboard"
+            onClick={handleDashboardClick}
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-bold text-sm border border-stone-300 dark:border-stone-700 transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+          >
+            <LayoutDashboard className="w-4 h-4 text-amber-500" />
+            <span>Student Dashboard</span>
           </button>
 
           <button
             onClick={onUploadPyps}
-            className="px-6 py-3 rounded-xl bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-semibold text-sm border border-stone-300 dark:border-stone-700 transition-all flex items-center gap-2 active:scale-95"
+            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-800 dark:text-stone-200 font-semibold text-sm border border-stone-300 dark:border-stone-700 transition-all flex items-center justify-center gap-2 active:scale-95"
           >
             <UploadCloud className="w-4 h-4 text-amber-500" />
-            <span>Upload Question Paper</span>
+            <span>Upload Paper</span>
           </button>
         </div>
       </section>
 
-      {/* Main Course Directory Section (What the student came for) */}
-      <main id="section-courses" className="py-8 px-4 sm:px-6 max-w-6xl mx-auto">
+      {/* Main Course Directory Section */}
+      <main id="section-courses" className="py-6 sm:py-8 px-3 sm:px-6 max-w-6xl mx-auto">
         <AvailablePypsLibrary
           onAnalyzePaper={(paper) => {
             if (onAnalyzePaper) {
               onAnalyzePaper(paper);
             } else {
-              onGetStarted();
+              if (onGetStarted) onGetStarted();
             }
           }}
           onNavigateToUpload={onUploadPyps}
@@ -244,8 +294,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* Clean Minimalist Footer */}
-      <footer className="border-t border-stone-200 dark:border-stone-800 py-6 px-6 text-xs text-stone-500 dark:text-stone-400 max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <footer className="border-t border-stone-200 dark:border-stone-800 py-6 px-6 text-xs text-stone-500 dark:text-stone-400 max-w-6xl mx-auto space-y-6">
+        {/* Caution & AI Disclaimer as requested */}
+        <FooterCaution />
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left pt-2">
           <div className="flex items-center gap-2">
             <ExamBreadLogo size="xs" />
             <span className="font-bold text-stone-800 dark:text-stone-200">EXAM BREAD</span>

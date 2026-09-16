@@ -34,7 +34,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1sX8kIpxqxuv_rnECo7rS9Ldl8eycBdJ5?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1s_xhyXpQyjneCDcahqLMuby_uJixVPAp?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SAS",
     "program": "btech"
   },
   {
@@ -45,7 +45,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1I4APVQ1f2H7rsCAmgOtkJdyfcZEYf0Mb?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1I70wRdv8K-i1r0aujNJlSc_KDhwrtJwL?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SCOPE",
     "program": "btech"
   },
   {
@@ -56,7 +56,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1tHnviLCZLHb5nIIZN46GeMXByYgd00tk?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1tQB_pJG7FDbYzPHz6Qeo65-Tx7f4aGyt?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SAS",
     "program": "btech"
   },
   {
@@ -67,7 +67,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1BJO_Uar8Po1Cu1wJKnoxgxmyqc8Y3AwG?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1BONfiA-Tot34L_WtD5Wonr5-N65Fz-tL?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SENSE",
     "program": "btech"
   },
   {
@@ -78,7 +78,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1IS00eod11NLFhK-3OcplfObtce9i9avB?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1IWiIQXy_Wih8CiV_J5ixj0vF4bURe9aC?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SAS",
     "program": "btech"
   },
   {
@@ -89,7 +89,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1IdbAS7uuur7rBe3DwKm6AazIj64l4tdc?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1IeMm_KgvNjJDTruPTeAg05wARxE5ajvT?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SAS",
     "program": "btech"
   },
   {
@@ -100,7 +100,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1t4uIwKaFsDIIa2egmJCqkBFf_YEVbqQ5?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1t9eAEmdGjVITrI-S3SL1o6eoR-DQ146D?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SAS",
     "program": "btech"
   },
   {
@@ -111,7 +111,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1srvzXnCnOYdxfvsyru1VXnFrYLnheeLp?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1stJE8PivCBSlORnAn7zsiBFf652KAoxb?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SAS",
     "program": "btech"
   },
   {
@@ -122,7 +122,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1_WzQBvmPLrqkHMqrNm5vf-qymuzh0tWU?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1WYZDP08SlUIkmYndZx-AifmPoXnHgg_8?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SCOPE",
     "program": "btech"
   },
   {
@@ -133,7 +133,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1x84CM3OM_p8Kp7zJ5KbBP1x4sLcXdg1P?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1zrTnZ_Vic99JgwBNO2sA3bTwRI45yRZf?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SENSE",
     "program": "btech"
   },
   {
@@ -144,7 +144,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1BqoZVBa0BorFroSJzBebI4GZqMlyCiGP?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1lUQ83HC1W2kF6ADniYvD8lPH3ZtmJ2S1?usp=drive_link",
     "category": "B.Tech Core (1st Year Foundation)",
-    "school": "SAS / Basic Sciences & Core",
+    "school": "SAS",
     "program": "btech"
   },
   {
@@ -155,7 +155,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/10RTJKQrZaCkM3fhnzM2Wc5-dVRuYibhr?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/10RzV2xvHsppyHND0dG4Jp74X-1SNzWD5?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SAS",
     "program": "mtech"
   },
   {
@@ -166,7 +166,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1my6RQ9lTTLUNx80wuuUaiWhGbxfeMiFm?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1n4VUtTZ86aYb5nycTq4VL0kZ22Rf3Yyg?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SCOPE",
     "program": "mtech"
   },
   {
@@ -177,7 +177,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1ojsW9LSvXhN79DmHYt2ZYE36gaH37lsk?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1or93H8WuLAp-ySL2qKpdZSojIdBOCWa5?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SAS",
     "program": "mtech"
   },
   {
@@ -188,7 +188,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1oQ2E3O12Q-MrSyF0bAy8SYSkI3PGEhpr?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1oRTUISkZf3baRQXxsBFLWreFxos1XYOk?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SENSE",
     "program": "mtech"
   },
   {
@@ -199,7 +199,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1nsQj97b3YlzbOjskxi2SFudecHT-5b0Q?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1nyUo5P2AWZ7GsmL96QxdcKyDUuYOxVgL?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SAS",
     "program": "mtech"
   },
   {
@@ -210,7 +210,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1na-PtJW4yHIDiaRImSbZtUVd9uFtIfSF?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1ndgy07kMjJZMtuZx0R-9qn9P9dpY4Aqy?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SAS",
     "program": "mtech"
   },
   {
@@ -221,7 +221,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1n9fS0n75c9Zlk0TmhGjx66BWNemne2x1?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1nB1DaZXS07f71p2q3h1K6FAnWIRfGi0l?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SAS",
     "program": "mtech"
   },
   {
@@ -232,7 +232,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1mN3wNJbKi8qoRldw7zV6Bm9i781d0GxE?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1mRHOY6po23RCAoh4qG0xocp9E5sAB55K?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SAS",
     "program": "mtech"
   },
   {
@@ -243,7 +243,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1m0-a6Fsq9NFg-SHJuHmdEX1jTfiw_i3A?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1m6JgA9j7vO8EAt8iNfcpNLfIhFtIqv3v?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SAS",
     "program": "mtech"
   },
   {
@@ -254,7 +254,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1mnWeDINlF2-DPwMHjISnfrWSLgjZZAqO?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1mpELDNMcq6gVwppR7u5Rlp9jJPppyidH?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SCOPE",
     "program": "mtech"
   },
   {
@@ -265,7 +265,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1oItZPNh8HWThjma5HAjMOZgpi6ix_A_H?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1oJqITdk6kE_Z_eqmJuaUZLtkMPrxpn9_?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SENSE",
     "program": "mtech"
   },
   {
@@ -276,7 +276,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1nQa44CLvitwzLsw-1D91ftcwQDagLAA4?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1nXZea6RzfZyZEYwKglVXQOQFOrNturb3?usp=drive_link",
     "category": "Integrated M.Tech / General Engineering",
-    "school": "Core Foundation",
+    "school": "SAS",
     "program": "mtech"
   },
   {
@@ -606,7 +606,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1doBvfYu_kSKBQtZo74sLIXgVko8oOWs2?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1ds40ogubTMCpboahP1mpAzJ7GKUG0BiO?usp=drive_link",
     "category": "Mathematics & Electronics Engineering",
-    "school": "SAS / SENSE",
+    "school": "SAS",
     "program": "math_ece"
   },
   {
@@ -617,7 +617,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1dPauqaNGVoLEfmLaSiEzclMzmfsPpivv?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1dQody-429AJK7ldvXvSqCvsjextu3MNY?usp=drive_link",
     "category": "Mathematics & Electronics Engineering",
-    "school": "SAS / SENSE",
+    "school": "SAS",
     "program": "math_ece"
   },
   {
@@ -628,7 +628,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1LhTdfp4HR1LmlTrNnbfAxbiNswXFBETx?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1LhUM7SJa5cagnPsmknHExRBe0NjiKwvO?usp=drive_link",
     "category": "Mathematics & Electronics Engineering",
-    "school": "SAS / SENSE",
+    "school": "SAS",
     "program": "math_ece"
   },
   {
@@ -639,7 +639,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1LbiHfMbujgzrB3Zr9aiQqDPNnCc8aHSl?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1Lckg6CylWjgHa_Rek86DGglrjDZPtxjw?usp=drive_link",
     "category": "Mathematics & Electronics Engineering",
-    "school": "SAS / SENSE",
+    "school": "SENSE",
     "program": "math_ece"
   },
   {
@@ -650,7 +650,7 @@ export const VPATH_COURSES: VPathCourse[] = [
     "fat": "https://drive.google.com/drive/folders/1NNYS3DR_ffG0CCkkpw-HEaRRQCS-XMV3?usp=drive_link",
     "short": "https://drive.google.com/drive/folders/1NOlt3sG4GQM8IfC0vFF3a8jDf4uM_lj4?usp=drive_link",
     "category": "Mathematics & Electronics Engineering",
-    "school": "SAS / SENSE",
+    "school": "SENSE",
     "program": "math_ece"
   }
 ];

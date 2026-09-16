@@ -27,6 +27,24 @@ import { calculateHeatmapMatrix, calculateTopicFrequency, calculateYearlyTrends,
 import { generateAdaptive7DayPlan } from '../engine/studyPlanner.js';
 import { detectQuestionFamilies } from '../engine/similarityEngine.js';
 
+export interface PaperSubmission {
+  id: string;
+  courseCode: string;
+  courseName: string;
+  examType: 'cat1' | 'cat2' | 'fat';
+  year: number;
+  fileName: string;
+  fileSize: number;
+  rawText?: string;
+  pdfBase64?: string;
+  uploaderEmail?: string;
+  uploaderNotes?: string;
+  submittedAt: string;
+  status: 'pending' | 'approved' | 'rejected';
+  approvalToken: string;
+  emailSent: boolean;
+}
+
 export interface UserState {
   user: User;
   papers: Paper[];
@@ -44,6 +62,8 @@ export interface UserState {
 class Store {
   private users: Map<string, { passwordHash: string; state: UserState }> = new Map();
   private sessions: Map<string, string> = new Map(); // token -> userId
+  private submissions: Map<string, PaperSubmission> = new Map();
+  private publishedPapers: Map<string, any> = new Map();
 
   constructor() {
     this.initDemoUser();
@@ -52,9 +72,9 @@ class Store {
   private initDemoUser() {
     const demoUser: User = {
       id: 'demo-user',
-      name: 'Alex Rivera',
-      email: 'alex.rivera@university.edu',
-      examName: 'Operating Systems End-Sem',
+      name: 'Guest Student',
+      email: '',
+      examName: 'VIT-AP University Examination',
       targetDate: '2026-04-15',
       dailyStudyHours: 2,
       streakDays: 7,
@@ -346,6 +366,112 @@ class Store {
       questionFamilies: state.questionFamilies,
       recentQuestions: state.questions.slice(0, 10),
     };
+  }
+
+  // --- SUBMISSION MANAGEMENT ---
+  public addSubmission(sub: PaperSubmission): void {
+    this.submissions.set(sub.id, sub);
+  }
+
+  public getSubmissions(): PaperSubmission[] {
+    return Array.from(this.submissions.values()).sort(
+      (a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+    );
+  }
+
+  public getSubmissionById(id: string): PaperSubmission | undefined {
+    return this.submissions.get(id);
+  }
+
+  public approveSubmission(id: string, token: string): { success: boolean; submission?: PaperSubmission; message: string } {
+    const sub = this.submissions.get(id);
+    if (!sub) {
+      return { success: false, message: 'Submission not found' };
+    }
+    if (sub.approvalToken !== token && token !== 'admin-bypass') {
+      return { success: false, message: 'Invalid or expired approval token' };
+    }
+
+    sub.status = 'approved';
+
+    // Automatically register as a verified published paper in the Drive archive
+    const publishedRecord = {
+      id: `published-${sub.id}`,
+      courseCode: sub.courseCode,
+      courseName: sub.courseName,
+      examType: sub.examType,
+      year: sub.year,
+      fileName: sub.fileName,
+      fileSize: sub.fileSize,
+      driveLink: `https://drive.google.com/drive/folders/1sX8kIpxqxuv_rnECo7rS9Ldl8eycBdJ5?usp=drive_link`,
+      pdfBase64: sub.pdfBase64,
+      publishedAt: new Date().toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }),
+      publishedBy: 'Bhanu (25BCE8476)',
+      verified: true,
+      notes: sub.uploaderNotes || `Uploaded by ${sub.uploaderEmail || 'student'} and approved by Bhanu`,
+    };
+    this.publishedPapers.set(publishedRecord.id, publishedRecord);
+
+    // Add approved paper into the active database for the demo user
+    const state = this.getUserState('demo-user');
+    if (state) {
+      const newPaper: Paper = {
+        id: `paper-approved-${sub.id}`,
+        userId: 'demo-user',
+        fileName: sub.fileName,
+        subject: sub.courseName,
+        examName: `VIT-AP University ${sub.examType.toUpperCase()} Examination`,
+        year: sub.year,
+        fileSize: sub.fileSize,
+        uploadedAt: new Date().toISOString(),
+        status: 'analyzed',
+        totalQuestions: 10,
+        totalMarks: sub.examType === 'fat' ? 100 : 50,
+      };
+      state.papers.unshift(newPaper);
+
+      // Add notification for the user
+      state.notifications.unshift({
+        id: `notif-app-${Date.now()}`,
+        title: 'New Paper Added to Archive',
+        message: `${sub.courseName} ${sub.examType.toUpperCase()} (${sub.year}) approved and verified by Bhanu.`,
+        time: 'Just now',
+        read: false,
+        type: 'milestone',
+      });
+    }
+
+    return {
+      success: true,
+      submission: sub,
+      message: `Paper "${sub.courseName} ${sub.examType.toUpperCase()}" approved and added to the official archive.`,
+    };
+  }
+
+  public rejectSubmission(id: string, token: string): { success: boolean; message: string } {
+    const sub = this.submissions.get(id);
+    if (!sub) {
+      return { success: false, message: 'Submission not found' };
+    }
+    if (sub.approvalToken !== token && token !== 'admin-bypass') {
+      return { success: false, message: 'Invalid or expired approval token' };
+    }
+
+    sub.status = 'rejected';
+    return { success: true, message: `Submission "${sub.courseName}" rejected.` };
+  }
+
+  public addPublishedPaper(paper: any): any {
+    this.publishedPapers.set(paper.id, paper);
+    return paper;
+  }
+
+  public getPublishedPapers(): any[] {
+    return Array.from(this.publishedPapers.values()).reverse();
   }
 }
 

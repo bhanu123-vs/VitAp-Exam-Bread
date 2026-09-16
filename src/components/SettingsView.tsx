@@ -27,7 +27,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 }) => {
   const { theme, setTheme } = useTheme();
   const [name, setName] = useState(user?.name || 'Student');
-  const [examName, setExamName] = useState(user?.examName || 'Operating Systems End-Sem');
+  const [examName, setExamName] = useState(user?.examName || 'VIT-AP Semester Examination');
   const [targetDate, setTargetDate] = useState(user?.targetDate || '2026-04-15');
   const [dailyHours, setDailyHours] = useState(user?.dailyStudyHours || 2);
   const [saved, setSaved] = useState(false);
@@ -205,7 +205,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <span>Reset to Official 5-Year Dataset</span>
             </h3>
             <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
-              Reloads the 5-year Operating Systems question papers (143 questions, 31 topics, verified insights).
+              Reloads the official 5-year university question papers dataset across all courses.
             </p>
           </div>
 
